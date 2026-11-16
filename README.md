@@ -7,7 +7,7 @@ Mobile app for the PET-CT team at **Apollo Cancer Centres, Vanagaram**. It cover
 | **Open the app** | https://hemakumard.github.io/petct-team-desk/ (GitHub Pages; installs to the home screen) |
 | **Master requirements & prompt** | `PROMPT.md` and `docs/REQUIREMENTS.md` (Claude Docs copy: https://claude.ai/artifact/2uCroKCSJroHN1ZKyEcqKJ) |
 | **Owner** | Hemakumar D, DGM – Oncology |
-| **Current version** | 13 (16-Nov-2026) – runs from GitHub, no claude.ai account needed |
+| **Current version** | 14 (16-Nov-2026) – runs from GitHub, no claude.ai account needed |
 
 ![Design](docs/screenshots/design.png)
 

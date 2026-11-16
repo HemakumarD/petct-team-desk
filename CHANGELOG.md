@@ -2,6 +2,7 @@
 
 | Date | Version | Change |
 |---|---|---|
+| 16-Nov-2026 | 14 | Sign-in banner on Today until Google Drive sync is set up (Sign in with Google / Not now) |
 | 16-Nov-2026 | 13 | Runs from GitHub Pages (https://hemakumard.github.io/petct-team-desk/) without claude.ai: data kept on the device, team sync through a Google Drive file, AI reading with the owner's Claude API key, appointment sheet loaded as an Excel upload, Print window, installable (PWA) and works offline. Backup download / import (also added to the claude.ai app for moving cases across) |
 | 28-Oct-2026 | 11 | Draggable + button: move it anywhere, position remembered per device, Reset position in Settings |
 | 28-Oct-2026 | 10 | Printing: Print buttons save a branded A4 PDF (appointment list, case slip, dashboard report with charts) to open and print from the computer's printer |

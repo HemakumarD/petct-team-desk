@@ -9,7 +9,7 @@
 <meta name="description" content="PET-CT Team Desk – appointments, billing, WhatsApp updates and dashboard for Apollo Cancer Centres, Vanagaram">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="PET-CT Desk">
-<meta name="petct-version" content="13">
+<meta name="petct-version" content="14">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -2203,6 +2203,17 @@ function setupStandaloneSettings(){
     $("gStatus").textContent = st.text + (st.lastSync ? ` · last sync ${st.lastSync.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})}` : "");
     $("gIn").style.display = st.signedIn ? "none" : ""; $("gOut").style.display = st.signedIn ? "" : "none"; $("gSync").style.display = st.signedIn ? "" : "none";
   });
+  // sign-in banner on Today
+  $("v-today").querySelector("h2").insertAdjacentHTML("afterend", `<div class="card" id="gBanner" style="display:none;margin-bottom:12px;border-left:4px solid var(--teal)">
+      <div style="font-weight:650;margin-bottom:4px">Sign in to sync with the team</div>
+      <div class="note" style="margin:0 0 10px">Cases are only on this phone until you sign in. Use the PET-CT team Google account – the same one on every phone.</div>
+      <div class="row"><button type="button" id="gBannerIn">Sign in with Google</button><button type="button" class="ghost" id="gBannerLater">Not now</button></div>
+    </div>`);
+  let bannerLater = sessionStorage.getItem("petct.bannerLater")==="1";
+  const showBanner = st=>{ const b=$("gBanner"); if(!b) return; const pending = PETCT.ls.get("petct.gSignedIn")==="1" && !/expired|Signed out/.test(st.text); b.style.display = (!st.signedIn && !pending && !bannerLater) ? "" : "none"; };
+  PETCT.onSyncStatus(showBanner);
+  $("gBannerIn").onclick = ()=>PETCT.signIn();
+  $("gBannerLater").onclick = ()=>{ bannerLater = true; sessionStorage.setItem("petct.bannerLater","1"); $("gBanner").style.display="none"; };
   $("gIn").onclick = ()=>PETCT.signIn(); $("gOut").onclick = ()=>PETCT.signOut(); $("gSync").onclick = ()=>PETCT.syncNow();
   const ls = PETCT.ls;
   $("sKey").value = ls.get("petct.apiKey") || ""; $("sModel").value = ls.get("petct.model") || PETCT.MODELS[0][0]; $("sName").value = ls.get("petct.userName") || "";

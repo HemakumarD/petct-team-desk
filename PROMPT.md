@@ -1,6 +1,6 @@
 # PET-CT Team Desk – Master prompt
 
-Version 13 · 16-Nov-2026. Copy everything in the box into a new Claude chat to rebuild or extend the app. Write new requirements under CHANGE REQUESTS at the end; existing cases are kept.
+Version 14 · 16-Nov-2026. Copy everything in the box into a new Claude chat to rebuild or extend the app. Write new requirements under CHANGE REQUESTS at the end; existing cases are kept.
 
 The live master copy is the Claude Doc: https://claude.ai/artifact/2uCroKCSJroHN1ZKyEcqKJ – keep both in step.
 
