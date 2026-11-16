@@ -1,0 +1,31 @@
+const { chromium } = require('playwright');
+const fs=require('fs');
+(async()=>{
+  const b=await chromium.launch(); const p=await b.newPage({viewport:{width:390,height:844},deviceScaleFactor:2});
+  const errs=[]; p.on('pageerror',e=>errs.push(e.message)); p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});
+  await p.route('**/*', r=>{ const u=r.request().url();
+    if(u.includes('chart.umd')) return r.fulfill({path:require('path').join(__dirname,'node_modules/chart.js/dist/chart.umd.js'),contentType:'text/javascript'});
+    if(u.startsWith('file:')) return r.continue(); return r.fulfill({body:''}); });
+  const init = fs.readFileSync(require('path').join(__dirname,'test.js'),'utf8').match(/addInitScript\(\(\) => \{([\s\S]*?)\n  \}\);/)[1];
+  await p.addInitScript(new Function(init));
+  const go=async h=>{ await p.evaluate(x=>location.hash=x,h).catch(()=>{}); await p.waitForTimeout(700); };
+  await p.goto('file://'+require('path').resolve(__dirname,'../claude/index.html')+'#today'); await p.waitForTimeout(900);
+  await p.screenshot({path: require('path').join(__dirname,'out','m_today.png')});
+  await go('#add'); await p.screenshot({path: require('path').join(__dirname,'out','m_add.png'),fullPage:true});
+  // billing test: change country to Bangladesh, enter discount
+  await p.selectOption('#a_country','Bangladesh'); await p.waitForTimeout(100);
+  console.log('amt BD', await p.inputValue('#a_amt'));
+  await p.selectOption('#a_country','India');
+  console.log('amt IN', await p.inputValue('#a_amt'));
+  await p.fill('#a_disc','2300'); await p.locator('#a_disc').blur();
+  console.log('disc', await p.inputValue('#a_disc'), 'bal', await p.textContent('#a_bal'));
+  await p.fill('[name=name]','Test Patient'); await p.click('#saveCase'); await p.waitForTimeout(500);
+  const saved = await p.evaluate(()=>0);
+  await go('#today'); 
+  await p.click('#dayList .case >> nth=0'); await p.waitForTimeout(500);
+  await p.screenshot({path: require('path').join(__dirname,'out','m_sheet.png')});
+  await p.click('#mClose');
+  await go('#dashboard'); await p.waitForTimeout(800); await p.screenshot({path: require('path').join(__dirname,'out','m_dash.png'),fullPage:true});
+  await go('#cases'); await p.screenshot({path: require('path').join(__dirname,'out','m_cases.png')});
+  console.log(errs.join('\n')||'no errors'); await b.close();
+})();

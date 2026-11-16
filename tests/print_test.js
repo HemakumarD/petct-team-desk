@@ -1,0 +1,20 @@
+const { chromium } = require('playwright'); const fs=require('fs');
+(async()=>{ const b=await chromium.launch(); const p=await b.newPage({viewport:{width:1200,height:900}});
+  const errs=[]; p.on('pageerror',e=>errs.push(e.message)); p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});
+  await p.route('**/*', r=>{ const u=r.request().url();
+    if(u.includes('chart.umd')) return r.fulfill({path:require('path').join(__dirname,'node_modules/chart.js/dist/chart.umd.js'),contentType:'text/javascript'});
+    if(u.includes('jspdf.umd')) return r.fulfill({path:require('path').join(__dirname,'node_modules/jspdf/dist/jspdf.umd.min.js'),contentType:'text/javascript'});
+    if(u.includes('autotable')) return r.fulfill({path:require('path').join(__dirname,'node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.min.js'),contentType:'text/javascript'});
+    if(u.startsWith('file:')) return r.continue(); return r.fulfill({body:''}); });
+  let init = fs.readFileSync(require('path').join(__dirname,'test.js'),'utf8').match(/addInitScript\(\(\) => \{([\s\S]*?)\n  \}\);/)[1];
+  init = init.replace("downloads: null", "downloads: { save: async ({filename,data})=>{ const buf = await data.arrayBuffer(); let s=''; const u=new Uint8Array(buf); for(let i=0;i<u.length;i++) s+=String.fromCharCode(u[i]); (window.__files=window.__files||[]).push({filename, b64: btoa(s)}); } }");
+  await p.addInitScript(new Function(init));
+  await p.goto('file://'+require('path').resolve(__dirname,'../claude/index.html')+'#today'); await p.waitForTimeout(800);
+  await p.click('#printDayBtn'); await p.waitForTimeout(1500);
+  await p.click('#dayList .case >> nth=0'); await p.waitForTimeout(300); await p.click('#mPrint'); await p.waitForTimeout(1200); await p.click('#mClose');
+  await p.evaluate(()=>location.hash='#dashboard'); await p.waitForTimeout(1200);
+  await p.click('#rangeChips .chip[data-r=fy]'); await p.waitForTimeout(800);
+  await p.click('#printDashBtn'); await p.waitForTimeout(2500);
+  const files = await p.evaluate(()=>window.__files||[]);
+  for(const f of files){ fs.writeFileSync(require('path').join(__dirname,'out',f.filename), Buffer.from(f.b64,'base64')); console.log(f.filename, Buffer.from(f.b64,'base64').length); }
+  console.log(errs.join('\n')||'no errors'); await b.close(); })();

@@ -1,0 +1,26 @@
+const { chromium } = require('playwright'); const fs=require('fs');
+(async()=>{ const b=await chromium.launch(); const ctx=await b.newContext({viewport:{width:390,height:844},hasTouch:true,deviceScaleFactor:2}); const p=await ctx.newPage();
+  const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+  await p.route('**/*', r=>{ const u=r.request().url(); if(u.includes('chart.umd')) return r.fulfill({path:require('path').join(__dirname,'node_modules/chart.js/dist/chart.umd.js'),contentType:'text/javascript'}); if(u.startsWith('file:')||u.startsWith('http://localhost')) return r.continue(); return r.fulfill({body:''}); });
+  const init = fs.readFileSync(require('path').join(__dirname,'test.js'),'utf8').match(/addInitScript\(\(\) => \{([\s\S]*?)\n  \}\);/)[1];
+  await p.addInitScript(new Function(init));
+  await p.goto('file://'+require('path').resolve(__dirname,'../claude/index.html')+'#today'); await p.waitForTimeout(800);
+  const box = async()=>{ const r = await p.locator('#fab').boundingBox(); return [Math.round(r.x),Math.round(r.y)]; };
+  console.log('start', await box());
+  const r = await p.locator('#fab').boundingBox();
+  await p.mouse.move(r.x+29, r.y+29); await p.mouse.down(); 
+  for(let i=1;i<=10;i++) await p.mouse.move(r.x+29-25*i, r.y+29-45*i);
+  await p.mouse.up(); await p.waitForTimeout(200);
+  console.log('after drag', await box(), 'hash', await p.evaluate(()=>location.hash));
+  // drag beyond top-left edge -> clamped
+  const r2 = await p.locator('#fab').boundingBox();
+  await p.mouse.move(r2.x+29, r2.y+29); await p.mouse.down(); for(let i=1;i<=10;i++) await p.mouse.move(r2.x-100*i, r2.y-100*i); await p.mouse.up();
+  console.log('clamped', await box());
+  await p.reload(); await p.waitForTimeout(800);
+  console.log('after reload (remembered)', await box());
+  await p.screenshot({path: require('path').join(__dirname,'out','fab_moved.png')});
+  await p.locator('#fab').click(); await p.waitForTimeout(300);
+  console.log('tap -> hash', await p.evaluate(()=>location.hash));
+  await p.evaluate(()=>location.hash='#settings'); await p.waitForTimeout(300); await p.click('#fabReset'); await p.evaluate(()=>location.hash='#today'); await p.waitForTimeout(300);
+  console.log('after reset', await box());
+  console.log(errs.join('\n')||'no errors'); await b.close(); })();

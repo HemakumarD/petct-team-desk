@@ -1,0 +1,12 @@
+const { chromium } = require('playwright'); const fs=require('fs');
+(async()=>{ const b=await chromium.launch(); const p=await b.newPage({viewport:{width:390,height:844}});
+  const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+  await p.route('**/*', r=>{ const u=r.request().url(); if(u.includes('chart.umd')) return r.fulfill({path:require('path').join(__dirname,'node_modules/chart.js/dist/chart.umd.js'),contentType:'text/javascript'}); if(u.startsWith('file:')) return r.continue(); return r.fulfill({body:''}); });
+  const init = fs.readFileSync(require('path').join(__dirname,'test.js'),'utf8').match(/addInitScript\(\(\) => \{([\s\S]*?)\n  \}\);/)[1];
+  await p.addInitScript(new Function(init));
+  await p.goto('file://'+require('path').resolve(__dirname,'../claude/index.html')+'#add'); await p.waitForTimeout(700);
+  await p.fill('#caseForm [name=name]','mrs.RUKMANI sampath'); await p.fill('#caseForm [name=referredBy]','DR.prabu p'); await p.locator('#caseForm [name=age]').click();
+  console.log('after blur:', await p.inputValue('#caseForm [name=name]'), '|', await p.inputValue('#caseForm [name=referredBy]'));
+  await p.fill('#caseForm [name=name]','MR.KANNAN G'); await p.click('#saveCase'); await p.waitForTimeout(500);
+  const names = await p.evaluate(()=>[...document.querySelectorAll('#dayList .nm')].map(x=>x.textContent).filter(t=>/Kannan/.test(t)));
+  console.log('saved:', names, errs.join('\n')||'no errors'); await b.close(); })();

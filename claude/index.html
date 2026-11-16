@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#00727c">
+<title>PET-CT Team – ACC Vanagaram</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+<style>
+:root{
+  --teal:#00727c; --teal-d:#00535a; --teal-l:#e3f1f2; --teal-m:#cfe7e9; --gold:#c99a2e; --gold-l:#fbf3e0;
+  --ink:#101c1f; --ink2:#3b4a4e; --muted:#6b7a7e; --line:rgba(16,40,44,.08); --bg:#f2f4f5; --card:#fff; --fill:#f3f5f6;
+  --red:#c4321f; --green:#1d7a43; --amber:#a36200; --blue:#2a5bb8;
+  --r:18px; --rs:12px;
+  --sh:0 1px 2px rgba(16,40,44,.05),0 6px 20px rgba(16,40,44,.06);
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:var(--font);color:var(--ink);background:var(--bg);font-size:16px;line-height:1.4;-webkit-font-smoothing:antialiased;
+  padding-bottom:calc(84px + env(safe-area-inset-bottom));padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+/* app bar */
+header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.86);-webkit-backdrop-filter:saturate(180%) blur(18px);backdrop-filter:saturate(180%) blur(18px);
+  border-bottom:.5px solid var(--line);padding:calc(10px + env(safe-area-inset-top)) 16px 10px;display:flex;align-items:center;gap:12px}
+header .logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(145deg,#008b96,var(--teal-d));display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,83,90,.3);flex:none}
+header .logo svg{width:24px;height:24px}
+header .tt{flex:1;min-width:0}
+header .t{font-size:17px;font-weight:700;letter-spacing:-.2px;color:var(--ink)}
+header .s{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header .datep{font-size:12.5px;font-weight:600;color:var(--teal-d);background:var(--teal-l);padding:6px 10px;border-radius:999px;white-space:nowrap}
+main{max-width:1100px;margin:0 auto;padding:6px 16px 16px}
+/* tab bar */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(255,255,255,.9);-webkit-backdrop-filter:saturate(180%) blur(18px);backdrop-filter:saturate(180%) blur(18px);
+  border-top:.5px solid var(--line);display:flex;justify-content:space-around;padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+nav.tabs a{flex:1;text-align:center;text-decoration:none;color:var(--muted);font-size:11px;font-weight:600;padding:2px 2px 4px;letter-spacing:.1px}
+nav.tabs a svg{display:block;margin:0 auto 3px;width:22px;height:22px;padding:4px 16px;box-sizing:content-box;border-radius:999px;transition:background .2s}
+nav.tabs a.on{color:var(--teal-d)}
+nav.tabs a.on svg{background:var(--teal-m)}
+/* FAB */
+.fab{position:fixed;right:18px;bottom:calc(88px + env(safe-area-inset-bottom));z-index:31;width:58px;height:58px;border-radius:18px;background:linear-gradient(145deg,#008b96,var(--teal-d));
+  color:#fff;display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,83,90,.35),0 2px 4px rgba(0,0,0,.1);text-decoration:none}
+.fab svg{width:28px;height:28px}
+.fab:active{transform:scale(.94)}
+.fab{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;transition:box-shadow .15s}
+.fab.dragging{transform:scale(1.08);box-shadow:0 14px 34px rgba(0,83,90,.45),0 4px 8px rgba(0,0,0,.15);transition:none;cursor:grabbing}
+body.v-add .fab,body.v-settings .fab,body.v-changes .fab{display:none}
+@media(min-width:900px){.fab{right:calc(50% - 530px)}}
+.view{display:none}.view.on{display:block;animation:fade .18s ease-out}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+h2{font-size:30px;font-weight:800;letter-spacing:-.6px;margin:14px 2px 14px;color:var(--ink)}
+h3{font-size:15px;font-weight:700;margin:0 0 12px;color:var(--ink);letter-spacing:-.1px}
+.card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:var(--sh)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grow{flex:1}
+/* KPI tiles */
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:#fff;border-radius:16px;padding:13px 14px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.kpi::before{content:"";position:absolute;left:14px;top:15px;width:8px;height:8px;border-radius:50%;background:var(--teal)}
+.kpi.gold::before{background:var(--gold)}.kpi.red::before{background:var(--red)}.kpi.green::before{background:var(--green)}.kpi.blue::before{background:var(--blue)}
+.kpi .l{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:700;padding-left:15px}
+.kpi .v{font-size:30px;font-weight:750;line-height:1.1;margin-top:6px;letter-spacing:-.8px;font-variant-numeric:tabular-nums}
+.kpi .x{font-size:12px;color:var(--muted);margin-top:3px}
+/* forms */
+label{display:block;font-size:12.5px;color:var(--muted);margin:0 0 5px 2px;font-weight:600}
+input,select,textarea{width:100%;font:inherit;font-size:16px;padding:12px 13px;border:1.5px solid transparent;border-radius:var(--rs);background:var(--fill);color:var(--ink);transition:border-color .15s,background .15s;-webkit-appearance:none;appearance:none}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7a7e' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 4px rgba(0,114,124,.12)}
+input:disabled{color:var(--muted)}
+input[type=checkbox]{-webkit-appearance:auto;appearance:auto;accent-color:var(--teal)}
+textarea{min-height:76px;resize:vertical}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:620px){.grid2,.grid3{grid-template-columns:1fr 1fr}.full-m{grid-column:1/-1}}
+.full{grid-column:1/-1}
+.sect{grid-column:1/-1;font-size:12px;font-weight:800;color:var(--teal-d);text-transform:uppercase;letter-spacing:.8px;margin:10px 2px -2px;padding-top:12px;border-top:.5px solid var(--line)}
+.sect:first-child{border-top:0;padding-top:0;margin-top:0}
+.money{font-variant-numeric:tabular-nums;text-align:right}
+.balbox{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,var(--teal-l),#eef7f7);border-radius:var(--rs);padding:12px 14px}
+.balbox .bl{font-size:12.5px;font-weight:700;color:var(--teal-d);text-transform:uppercase;letter-spacing:.6px}
+.balbox .bv{font-size:22px;font-weight:800;color:var(--teal-d);font-variant-numeric:tabular-nums;letter-spacing:-.4px}
+.neg{color:var(--red)!important}
+/* buttons */
+button,.btn{font:inherit;font-size:15px;font-weight:650;border:0;border-radius:14px;padding:12px 18px;cursor:pointer;background:var(--teal);color:#fff;letter-spacing:-.1px;transition:transform .1s,filter .15s;box-shadow:0 1px 2px rgba(0,83,90,.2)}
+button:active,.btn:active,.chip:active,.case:active{transform:scale(.98)}
+button.sec{background:var(--teal-l);color:var(--teal-d);box-shadow:none}
+button.gold{background:linear-gradient(145deg,#d6a93c,#b8871f);color:#fff}
+button.ghost{background:var(--fill);color:var(--ink2);box-shadow:none}
+button.danger{background:#fdecea;color:var(--red);box-shadow:none}
+button:disabled{opacity:.45;cursor:default}
+button.sm{padding:8px 12px;font-size:13.5px;border-radius:11px}
+/* chips / segmented */
+.chips{display:flex;gap:7px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:2px 1px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:0;background:#fff;border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--ink2);box-shadow:inset 0 0 0 1px var(--line);white-space:nowrap}
+.card .chip{background:var(--fill);box-shadow:none}
+.chip.on,.card .chip.on{background:var(--ink);color:#fff;box-shadow:none}
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--teal-l);color:var(--teal-d);white-space:nowrap;letter-spacing:.1px}
+.badge.dot::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.b-Scheduled{background:#e9effc;color:var(--blue)}
+.b-Prep{background:var(--gold-l);color:var(--amber)}
+.b-Arrived{background:#f0e9fb;color:#5b2ea3}
+.b-ScanDone{background:#e2f4e9;color:var(--green)}
+.b-Reported{background:#d3eedd;color:#0f5a2b}
+.b-Cancelled,.b-Noshow{background:#fdecea;color:var(--red)}
+.t-Domestic{background:#eef2f3;color:#40555a}
+.t-BD{background:#fde9da;color:#a14400}
+.t-SAARC{background:#fbf3e0;color:var(--amber)}
+.t-Intl{background:#e9effc;color:var(--blue)}
+/* list cells */
+.case{display:flex;gap:12px;align-items:center;padding:13px 2px;border-top:.5px solid var(--line);cursor:pointer;transition:background .15s;border-radius:12px}
+.case:first-child{border-top:0}
+.case .av{width:42px;height:42px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:750;font-size:15px;color:#fff;letter-spacing:.3px}
+.case .tm{min-width:50px;font-weight:700;color:var(--teal-d);font-size:13.5px;line-height:1.2;text-align:center}
+.case .nm{font-weight:650;font-size:16px;letter-spacing:-.2px}
+.case .mt{font-size:13px;color:var(--muted);margin-top:2px;line-height:1.35}
+.case .bd{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.case .chev{color:#b4bfc2;flex:none}
+.case .amt{font-size:13px;font-weight:700;color:var(--ink2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.empty{color:var(--muted);text-align:center;padding:28px 8px;font-size:15px}
+.empty a{color:var(--teal);font-weight:650}
+/* capture */
+.drop{border:1.5px dashed #b5cbcf;border-radius:16px;padding:20px;text-align:center;background:var(--fill);cursor:pointer}
+.drop.over{background:var(--teal-l);border-color:var(--teal)}
+.drop b{color:var(--ink)}
+label.camBtn{border-radius:16px!important;display:flex!important;flex-direction:column;align-items:center;gap:4px;font-weight:650;box-shadow:0 2px 8px rgba(0,83,90,.2)}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.thumbs img{width:74px;height:74px;object-fit:cover;border-radius:12px;box-shadow:var(--sh)}
+.ai{display:flex;gap:10px;align-items:center;font-size:14px;margin-top:12px;color:var(--ink2)}
+.spin{width:18px;height:18px;border:2.5px solid var(--teal-m);border-top-color:var(--teal);border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.note{font-size:13px;color:var(--muted)}
+.warn,.err,.ok{padding:12px 14px;border-radius:14px;font-size:14px;margin-bottom:12px;line-height:1.4}
+.warn{background:var(--gold-l);color:#6d4b00}
+.err{background:#fdecea;color:var(--red)}
+.ok{background:#e2f4e9;color:var(--green)}
+.filled{background:#fff8e1!important;border-color:#ecd28a!important}
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:10px 8px;border-bottom:.5px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.5px}
+tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tblwrap{overflow-x:auto}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:820px){.charts{grid-template-columns:1fr}}
+.chartbox{position:relative;height:260px}
+.chartbox.tall{height:320px}
+/* bottom sheet */
+.modal{position:fixed;inset:0;background:rgba(8,22,25,.42);z-index:50;display:none;align-items:flex-end;justify-content:center;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+.modal.on{display:flex;animation:fadeb .2s}
+@keyframes fadeb{from{opacity:0}to{opacity:1}}
+.sheet{background:var(--bg);width:100%;max-width:720px;max-height:92vh;overflow:auto;border-radius:24px 24px 0 0;padding:8px 16px calc(18px + env(safe-area-inset-bottom));animation:up .26s cubic-bezier(.2,.8,.2,1);box-shadow:0 -8px 30px rgba(0,0,0,.15)}
+.sheet::before{content:"";display:block;width:38px;height:5px;border-radius:3px;background:#c9d2d4;margin:2px auto 10px}
+@keyframes up{from{transform:translateY(40px);opacity:.6}to{transform:none;opacity:1}}
+@media(min-width:760px){.modal{align-items:center}.sheet{border-radius:24px}.sheet::before{display:none}}
+.sheet .hd{display:flex;align-items:center;justify-content:space-between;margin:4px 2px 12px}
+.sheet .hd h3{font-size:20px;font-weight:800;letter-spacing:-.4px}
+.sheet form,.sheet>.card{background:#fff;border-radius:var(--r);padding:16px;box-shadow:var(--sh)}
+.statusbar{display:flex;gap:7px;flex-wrap:nowrap;overflow-x:auto;margin:6px 0 14px;scrollbar-width:none}
+.statusbar::-webkit-scrollbar{display:none}
+.hist{font-size:13px;color:var(--muted);background:#fff;border-radius:var(--r);padding:8px 14px;box-shadow:var(--sh)}
+.hist div{padding:7px 0;border-bottom:.5px solid var(--line)}
+.hist div:last-child{border-bottom:0}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom));background:#1c2b2e;color:#fff;padding:12px 18px;border-radius:14px;z-index:60;font-size:14px;font-weight:500;display:none;max-width:90vw;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.split{display:flex;height:10px;border-radius:999px;overflow:hidden;background:var(--fill);margin-top:8px;gap:2px}
+.split span{display:block;height:100%}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--ink2);margin-top:10px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:0}
+.prog{height:10px;background:var(--fill);border-radius:999px;overflow:hidden;margin-top:10px}
+.prog span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--teal),#2aa3ad)}
+.hidden{display:none!important}
+.grid2>*,.grid3>*{min-width:0}
+input[type=date],input[type=time]{min-width:0;min-height:48px}
+main{padding-bottom:90px}
+.hero{grid-column:1/-1;background:linear-gradient(140deg,#00838d 0%,var(--teal-d) 100%);color:#fff;border-radius:22px;padding:18px 18px 16px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;box-shadow:0 10px 26px rgba(0,83,90,.28);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-40px;top:-50px;width:180px;height:180px;border-radius:50%;border:26px solid rgba(255,255,255,.07)}
+.hero .hl{font-size:13px;font-weight:600;opacity:.85}
+.hero .hv{font-size:56px;font-weight:800;line-height:1;letter-spacing:-2px;margin-top:6px;font-variant-numeric:tabular-nums}
+.hero .hs{font-size:13px;opacity:.85;margin-top:2px;white-space:nowrap}
+.hero .hstats{display:flex;gap:14px;position:relative;z-index:1}
+.hero .hstats div{text-align:center}
+.hero .hstats b{display:block;font-size:22px;font-weight:750;font-variant-numeric:tabular-nums}
+.hero .hstats span{font-size:10px;opacity:.85;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+.kpi.wide{grid-column:1/-1}
+.sumrows div{display:flex;justify-content:space-between;align-items:center;padding:11px 2px;border-bottom:.5px solid var(--line);gap:10px}
+.sumrows span{font-weight:600;font-size:15px}
+.sumrows small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.sumrows b{font-size:17px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.sumrows .tot{border-bottom:0;background:var(--teal-l);border-radius:12px;padding:12px;margin-top:6px}
+.sumrows .tot b{font-size:20px;color:var(--teal-d)}
+#dayKpis{grid-template-columns:repeat(4,1fr)}
+details summary::-webkit-details-marker{color:var(--teal)}
+.vh{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
+label.btn,label.drop{position:relative;cursor:pointer}
+a{color:var(--teal)}
+@media(max-width:620px){.kpis{grid-template-columns:1fr 1fr;gap:10px}.kpi .v{font-size:26px}#dayKpis{grid-template-columns:1fr 1fr}#dayKpis .kpi{padding:12px 13px}#dayKpis .kpi .l{font-size:10.5px;letter-spacing:.3px}#dayKpis .kpi .v{font-size:24px}h2{font-size:28px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.2"/><path d="M12 1.8v3M12 19.2v3M1.8 12h3M19.2 12h3" stroke="#e9c46a"/></svg></div>
+  <div class="tt"><div class="t">PET-CT Desk</div><div class="s">Apollo Cancer Centres · Vanagaram</div></div>
+  <div class="datep" id="hdrDate"></div>
+</header>
+
+<main>
+  <div id="banner"></div>
+
+  <!-- TODAY -->
+  <section class="view" id="v-today">
+    <h2>Appointments</h2>
+    <div class="row" style="margin-bottom:12px;flex-wrap:nowrap">
+      <button class="ghost sm" id="dPrev" aria-label="Previous day" style="background:#fff;box-shadow:var(--sh);font-size:18px;padding:8px 14px">‹</button>
+      <input type="date" id="dayPick" class="grow" style="background:#fff;box-shadow:var(--sh);text-align:center;font-weight:650">
+      <button class="ghost sm" id="dNext" aria-label="Next day" style="background:#fff;box-shadow:var(--sh);font-size:18px;padding:8px 14px">›</button>
+    </div>
+    <div class="chips" style="margin-bottom:10px"><span class="chip" id="goToday">Today</span><span class="chip" id="goTom">Tomorrow – planning</span><a class="chip" href="#changes" style="text-decoration:none">↶ Discard changes</a></div>
+    <div class="row" style="margin-bottom:10px">
+      <button class="gold grow" id="snapBtn" style="display:flex;align-items:center;justify-content:center;gap:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="15" rx="3"/><circle cx="12" cy="12.5" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg>Daily snapshot</button>
+      <button class="sec grow" id="sumBtn" style="display:flex;align-items:center;justify-content:center;gap:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="8" y="8" width="12" height="13" rx="2.5"/><path d="M16 8V5.5A2.5 2.5 0 0 0 13.5 3h-7A2.5 2.5 0 0 0 4 5.5v9A2.5 2.5 0 0 0 6.5 17H8"/></svg>Copy summary</button>
+    </div>
+<div class="row" style="flex-wrap:nowrap;margin-bottom:12px">    <button class="ghost" id="sheetBtn" style="flex:1;background:#fff;box-shadow:var(--sh);display:flex;align-items:center;justify-content:center;gap:9px;color:var(--teal-d)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#107c41" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 9v12M15 9v12M3 15h18"/></svg>Pull from appointment sheet</button><button class="ghost" id="printDayBtn" aria-label="Print" style="background:#fff;box-shadow:var(--sh);display:flex;align-items:center;gap:7px;color:var(--teal-d)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Print</button></div>
+    <div class="kpis" id="dayKpis"></div>
+    <div class="card hidden" id="planCard"></div>
+    <div class="card hidden" id="pendRep"></div>
+    <div class="card">
+      <div class="row" style="margin-bottom:8px">
+        <div class="chips grow" id="dayStatusChips"></div>
+      </div>
+      <div id="dayList"></div>
+    </div>
+  </section>
+
+  <!-- ADD -->
+  <section class="view" id="v-add">
+    <h2>New PET-CT case</h2>
+    <div class="card">
+      <h3>1 · Upload case sheet / prescription</h3>
+      <div class="grid2" style="margin-bottom:10px">
+        <label class="btn camBtn" style="padding:14px 10px;text-align:center;color:#fff;font-size:15px;margin:0">📷 Camera – paper<input type="file" class="vh camIn" data-src="paper" accept="image/*" capture="environment"></label>
+        <label class="btn camBtn" style="padding:14px 10px;text-align:center;background:var(--gold);color:#fff;font-size:15px;margin:0">📱 Camera – phone screen<input type="file" class="vh camIn" data-src="screen" accept="image/*" capture="environment"></label>
+      </div>
+      <label class="drop" id="drop" style="display:block;color:inherit;font-size:inherit;margin:0">
+        <input type="file" id="fileIn" class="vh" accept="image/*,application/pdf,.pdf,.jpg,.jpeg,.png,.heic,.webp,.tif,.tiff" multiple>
+        <b>Or choose files / gallery</b><br>
+        <span class="note">Case sheet, prescription or referral letter · PDF (incl. scanned), JPG, JPEG, PNG · up to 4 pages</span>
+      </label>
+      <p class="note" id="camTip" style="margin:8px 0 0">Tip: lay the paper flat in good light, fill the frame, and avoid shadows. For another phone's screen, turn its brightness up, hold steady and tilt slightly to avoid glare. Tap the camera again to add more pages. If your phone shows a menu instead of the camera, choose <b>Take Photo</b> / <b>Camera</b>.</p>
+      <div class="thumbs" id="thumbs"></div>
+      <div id="aiState"></div>
+      <div class="row" style="margin-top:10px">
+        <button id="readBtn" disabled>Read details</button>
+        <button class="ghost" id="clearFiles">Clear</button>
+      </div>
+      <p class="note" style="margin:10px 0 0">Only the extracted details are saved. The photos stay on this phone.</p>
+    </div>
+    <div class="card">
+      <h3>…or paste a WhatsApp message</h3>
+      <textarea id="waText" placeholder="Paste the case message from the PET-CT referral group here. One message can have several patients." style="min-height:110px"></textarea>
+      <div class="row" style="margin-top:10px"><button id="waBtn">Read message</button><button class="ghost" id="waClear">Clear</button></div>
+      <div id="waState"></div>
+    </div>
+    <div class="card" id="formCard">
+      <h3>2 · Check details and save <span id="queueLbl" class="badge" style="margin-left:6px;display:none"></span></h3>
+      <form id="caseForm" autocomplete="off"></form>
+    </div>
+  </section>
+
+  <!-- CASES -->
+  <section class="view" id="v-cases">
+    <h2>All cases</h2>
+    <div class="card">
+      <input id="q" placeholder="Search name, UHID, doctor, phone" style="padding-left:40px;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%236b7a7e' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E&quot;);background-repeat:no-repeat;background-position:13px center">
+      <details style="margin-top:10px"><summary style="cursor:pointer;font-weight:650;color:var(--teal-d);font-size:14px;padding:4px 2px">Filters</summary>
+      <div class="grid3" style="margin-top:10px">
+        <div><label>From</label><input type="date" id="cFrom"></div>
+        <div><label>To</label><input type="date" id="cTo"></div>
+        <div><label>Patient type</label><select id="cType"><option value="">All</option></select></div>
+        <div><label>Unit</label><select id="cUnit"><option value="">All units</option></select></div>
+        <div><label>Status</label><select id="cStatus"><option value="">All</option></select></div>
+      </div></details>
+      <div class="row" style="margin-top:10px">
+        <div class="note grow" id="cCount"></div>
+        <button class="sec sm" id="csvBtn">Export CSV</button>
+      </div>
+    </div>
+    <div class="card"><div id="caseList"></div></div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section class="view" id="v-dash">
+    <div class="row" style="justify-content:space-between;flex-wrap:nowrap"><h2>Dashboard</h2><button class="sec sm" id="printDashBtn" style="display:flex;align-items:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Print report</button></div>
+    <div class="card">
+      <div class="chips" id="rangeChips"></div>
+      <div class="grid2 hidden" id="customRange" style="margin-top:10px">
+        <div><label>From</label><input type="date" id="rFrom"></div>
+        <div><label>To</label><input type="date" id="rTo"></div>
+      </div>
+      <div class="note" id="rangeLbl" style="margin-top:8px"></div>
+    </div>
+    <div class="kpis" id="dashKpis"></div>
+    <div class="card" id="targetCard"></div>
+    <div class="card" id="milestoneCard"></div>
+    <div class="card">
+      <h3>Patient mix</h3>
+      <div id="mixBar"></div>
+    </div>
+    <div class="charts">
+      <div class="card"><h3>Daily cases &amp; cumulative</h3><div class="chartbox"><canvas id="chDaily"></canvas></div></div>
+      <div class="card"><h3>Cases by referring unit</h3><div class="chartbox tall"><canvas id="chUnit"></canvas></div></div>
+      <div class="card"><h3>Domestic vs international</h3><div class="chartbox"><canvas id="chType"></canvas></div></div>
+      <div class="card"><h3>Status</h3><div class="chartbox"><canvas id="chStatus"></canvas></div></div>
+      <div class="card"><h3>Day of week</h3><div class="chartbox"><canvas id="chDow"></canvas></div></div>
+      <div class="card"><h3>Age bands</h3><div class="chartbox"><canvas id="chAge"></canvas></div></div>
+    </div>
+    <div class="card"><h3>Standard statistics</h3><div class="tblwrap" id="statsTbl"></div></div>
+    <div class="charts">
+      <div class="card"><h3>Unit-wise summary</h3><div class="tblwrap" id="unitTbl"></div></div>
+      <div class="card"><h3>Top referring doctors</h3><div class="tblwrap" id="docTbl"></div></div>
+    </div>
+    <div class="card"><h3>International patients by country</h3><div class="tblwrap" id="countryTbl"></div></div>
+    <div class="charts">
+      <div class="card"><h3>Turnaround time</h3><div class="tblwrap" id="tatTbl"></div></div>
+      <div class="card"><h3>Scan purpose</h3><div class="tblwrap" id="visitTbl"></div></div>
+    </div>
+    <div class="card" id="revCard"></div>
+    <div class="charts">
+      <div class="card"><h3>Doctors to follow up</h3><div class="note" style="margin-bottom:6px">Referred in the previous 90 days but not in the last 30 days</div><div class="tblwrap" id="dormTbl"></div></div>
+      <div class="card"><h3>New referring doctors in this period</h3><div class="tblwrap" id="newDocTbl"></div></div>
+    </div>
+    <div class="card"><h3>Month-wise trend</h3><div class="tblwrap" id="monthTbl"></div></div>
+  </section>
+
+  <!-- DISCARD CHANGES -->
+  <section class="view" id="v-changes">
+    <h2>Discard changes</h2>
+    <div class="card">
+      <p class="note" style="margin:0 0 8px">Every save is listed here, newest first. Tap <b>Undo</b> to put a case or the settings back the way they were before that change. Deleted cases can be brought back. The last 200 changes are kept.</p>
+      <div class="chips" id="chgChips"></div>
+    </div>
+    <div class="card"><div id="chgList"></div></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section class="view" id="v-settings">
+    <h2>Settings</h2>
+    <div class="card">
+      <div class="row"><div class="grow"><h3 style="margin:0">Discard changes</h3><div class="note">Undo a recent save, status change, prep tick or deletion</div></div><a class="btn sec" href="#changes" style="text-decoration:none;background:#fff;color:var(--teal);border:1px solid var(--teal)">Open</a></div>
+    </div>
+    <div class="card">
+      <div class="grid2">
+        <div class="full"><label>Default "Referred to"</label><input id="sRefTo"></div>
+        <div><label>Monthly case target</label><input id="sTarget" type="number" min="0" inputmode="numeric"></div>
+        <div><label>Financial year starts</label><select id="sFy"><option value="4">April</option><option value="1">January</option></select></div>
+        <div><label>Domestic tariff (₹)</label><input id="sTarD" class="money" inputmode="decimal"></div>
+        <div><label>International tariff – Bangladesh, SAARC, other (₹)</label><input id="sTarI" class="money" inputmode="decimal"></div>
+        <div><label>PET-CT desk phone (for prep messages)</label><input id="sPhone" inputmode="tel"></div>
+        <div><label>Fasting hours before scan</label><input id="sFast" type="number" min="0" inputmode="numeric"></div>
+        <div class="full"><label>Scans completed before this app (for the milestone count)</label><input id="sOpen" type="number" min="0" inputmode="numeric"></div>
+        <div class="full"><label>Appointment sheet location (Microsoft 365 file shared by Nuclear Medicine Vanagaram)</label><input id="sSheet" style="font-size:13px"></div>
+        <div class="full"><div class="row" style="justify-content:space-between;background:var(--fill);border-radius:12px;padding:10px 12px"><span class="note" style="color:var(--ink2)">The <b>+</b> button can be dragged anywhere on screen. Its position is remembered on this device.</span><button type="button" class="sec sm" id="fabReset">Reset position</button></div></div>
+        <div class="full"><label>Referring units (one per line)</label><textarea id="sUnits" style="min-height:180px"></textarea></div>
+        <div class="full"><label>Scan types (one per line)</label><textarea id="sScans" style="min-height:120px"></textarea></div>
+      </div>
+      <div class="row" style="margin-top:12px"><button id="saveSettings">Save settings</button><span class="note" id="settingsMsg"></span></div>
+    </div>
+    <div class="card" id="backupCard">
+      <h3>Backup</h3>
+      <p class="note" style="margin:0 0 10px">Download every case, the settings and the change history as one file. Keep it safe – it contains patient details.</p>
+      <div class="row"><button type="button" id="backupBtn">Download backup</button><span class="note" id="backupMsg"></span></div>
+    </div>
+    <div class="card">
+      <h3>How patients are classified</h3>
+      <p class="note" style="margin:0">India → <b>Domestic</b>. Bangladesh → <b>International – Bangladesh</b> (shown separately). Nepal, Bhutan, Sri Lanka, Maldives, Afghanistan, Pakistan → <b>International – Other SAARC</b>. Any other country → <b>International – Non-SAARC</b>.</p>
+    </div>
+    <div class="card">
+      <h3>Install on your phone</h3>
+      <p class="note" style="margin:0 0 6px"><b>iPhone:</b> open this page in Safari, tap Share, then <i>Add to Home Screen</i>.</p>
+      <p class="note" style="margin:0"><b>Android:</b> open in Chrome, tap ⋮, then <i>Add to Home screen</i>.</p>
+    </div>
+  </section>
+</main>
+
+<nav class="tabs" id="tabs">
+  <a href="#today" data-v="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Today</a>
+  <a href="#add" data-v="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>Add case</a>
+  <a href="#cases" data-v="cases"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Cases</a>
+  <a href="#dashboard" data-v="dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Dashboard</a>
+  <a href="#settings" data-v="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</a>
+</nav>
+
+<a class="fab" id="fab" href="#add" aria-label="Add case – drag to move"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></a>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- constants ---------- */
+const STATUSES = ["Scheduled","Prep Informed","Arrived","Scan Done","Reported","Cancelled","No-show"];
+const ACTIVE_FLOW = ["Scheduled","Prep Informed","Arrived","Scan Done","Reported"];
+const DROPPED = ["Cancelled","No-show"];
+const DONE = ["Scan Done","Reported"];
+const TYPES = ["Domestic","International – Bangladesh","International – Other SAARC","International – Non-SAARC"];
+const TYPE_SHORT = {"Domestic":"Domestic","International – Bangladesh":"Bangladesh","International – Other SAARC":"Other SAARC","International – Non-SAARC":"Non-SAARC"};
+const TYPE_CLS = {"Domestic":"t-Domestic","International – Bangladesh":"t-BD","International – Other SAARC":"t-SAARC","International – Non-SAARC":"t-Intl"};
+const TYPE_COL = {"Domestic":"#00727c","International – Bangladesh":"#d9731a","International – Other SAARC":"#c99a2e","International – Non-SAARC":"#2856a3"};
+const SAARC_OTHER = ["Nepal","Bhutan","Sri Lanka","Maldives","Afghanistan","Pakistan"];
+const COUNTRIES = ["India","Bangladesh",...SAARC_OTHER,"Myanmar","Oman","UAE","Saudi Arabia","Kenya","Nigeria","Iraq","Other"];
+const DEFAULT_SETTINGS = {
+  referredTo: "Dr. Abdul Rahim Syed",
+  monthlyTarget: 0,
+  fyStartMonth: 4,
+  units: ["ACC Vanagaram (In-house)","Apollo Main Hospital, Greams Road","Apollo Cancer Centre, Teynampet","Apollo Proton Cancer Centre, Taramani","Apollo Hospitals, OMR","Apollo Speciality Hospitals, Vanagaram","Apollo First Med Hospitals","Apollo Women's Hospital","Apollo Hospitals, Tondiarpet","International Patient Desk","External – Private doctor / clinic","External – Other hospital","Walk-in / Self"],
+  scanTypes: ["Whole Body FDG PET-CT","PSMA PET-CT","DOTA (Ga-68) PET-CT","Brain FDG PET-CT","Cardiac PET-CT","Other"],
+  deskPhone: "",
+  fastingHours: 6,
+  openingScans: 0,
+  sheetUri: "",  /* set the OneDrive file location in Settings */
+  tariffs: { domestic: 27300, international: 38500 }
+};
+const VISIT_TYPES = ["Baseline / staging","Follow-up / response","Restaging / recurrence","Other"];
+const BILLING = ["Cash","Insurance","Corporate / PSU","Govt scheme (CMCHIS etc.)","International package","Staff / concession","Other"];
+const PREP = [["fasting","Fasting instructions given"],["renal","Urea / creatinine report received"],["diabetic","Diabetic status checked & sugar plan given"],["prev","Previous scans / CDs requested"],["attender","Attender details noted"]];
+const prepDone = c => PREP.filter(([k])=>c.prep && c.prep[k]).length;
+const STATUS_CLS = s => "b-" + s.replace(/[^A-Za-z]/g,"").replace("PrepInformed","Prep");
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+/* ---------- state ---------- */
+let db = null, user = null, sample = null, downloads = null, mcp = null;
+let cases = [], settings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+let canWrite = true, loaded = false;
+let dayStatusFilter = "", range = "month";
+let pendingFiles = []; // {blob, url}
+const pendingSrc = new Set();
+const charts = {};
+let profiles = {};
+
+/* ---------- utils ---------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad = n => String(n).padStart(2,"0");
+const ymd = d => d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const today = () => ymd(new Date());
+const parseYmd = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y,m-1,d); };
+const addDays = (s,n) => { const d = parseYmd(s); d.setDate(d.getDate()+n); return ymd(d); };
+const fmtD = s => { if(!s) return "–"; const d = parseYmd(s); return pad(d.getDate())+"-"+MON[d.getMonth()]+"-"+d.getFullYear(); };
+const fmtTime = t => { if(!t) return ""; const [h,m] = t.split(":").map(Number); const ap = h>=12?"PM":"AM"; return ((h%12)||12)+":"+pad(m)+" "+ap; };
+const fmtNum = x => (Number(x)||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtAcc = x => { const n = Number(x)||0; const t = "₹ " + Math.abs(n).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2}); return n<0 ? "("+t+")" : t; };
+const parseMoney = v => { const t = String(v??"").replace(/[₹,\s]/g,"").replace(/^\((.*)\)$/,"-$1"); if(t==="") return null; const n = parseFloat(t); return isNaN(n) ? null : Math.round(n*100)/100; };
+function tariffFor(type){ const t = settings.tariffs || {}; return type==="Domestic" ? (Number(t.domestic)||27300) : (Number(t.international)||38500); }
+const pct = (a,b) => b ? Math.round(a*1000/b)/10 : 0;
+const r1 = x => Math.round(x*10)/10;
+const f1 = x => (Math.round(x*10)/10).toFixed(1);
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.style.display="block"; clearTimeout(toast._t); toast._t=setTimeout(()=>t.style.display="none",2600); }
+function classify(country){
+  const c = (country||"").trim().toLowerCase();
+  if(!c || c==="india" || c==="indian") return "Domestic";
+  if(c.startsWith("bangla")) return "International – Bangladesh";
+  if(SAARC_OTHER.some(x => c.startsWith(x.toLowerCase().slice(0,5)))) return "International – Other SAARC";
+  return "International – Non-SAARC";
+}
+function titleCase(s){ return String(s||"").toLowerCase().replace(/\b([a-z])/g, m=>m.toUpperCase()).replace(/\bDr\b\.?/g,"Dr."); }
+const NAME_TITLES = [["mrs","Mrs."],["mr","Mr."],["ms","Ms."],["miss","Miss"],["master","Master"],["mast","Master"],["baby","Baby"],["dr","Dr."],["smt","Smt."],["shri","Shri"],["sri","Sri"],["selvi","Selvi"],["thiru","Thiru"],["prof","Prof."]];
+function properName(raw){
+  let s = String(raw||"").replace(/[ \s]+/g," ").trim();
+  if(!s) return "";
+  let title = "";
+  // title at the start, with or without a dot / space: "mr.kannan", "MRS  RUKMANI", "Ms.lakshmi", "mr .ravi"
+  const m = s.match(/^(mrs|mr|ms|miss|master|mast|baby|dr|smt|shri|sri|selvi|thiru|prof)(\s*\.\s*|\s+)(?=\S)/i);
+  if(m){ title = NAME_TITLES.find(t=>t[0]===m[1].toLowerCase())[1]; s = s.slice(m[0].length); }
+  // proper case: first letter of each word / initial upper, rest lower; dots get a following space only between initials and words
+  s = s.toLowerCase()
+       .replace(/(^|[\s\-'’(])([a-z])/g, (x,a,b)=>a+b.toUpperCase())
+       .replace(/\.([a-z])/g, (x,b)=>"."+b.toUpperCase())
+       .replace(/\b(Mc)([a-z])/g,(x,a,b)=>a+b.toUpperCase());
+  s = s.replace(/\s+/g," ").trim().replace(/\b(Llp|Pvt|Ltd|Ii|Iii|Iv)\b/g, w=>({Llp:"LLP",Pvt:"Pvt",Ltd:"Ltd",Ii:"II",Iii:"III",Iv:"IV"})[w]);
+  return title ? title + " " + s : s;
+}
+function properDoctor(raw){
+  const s = String(raw||"").replace(/\s+/g," ").trim(); if(!s) return "";
+  if(/^self$/i.test(s)) return "Self";
+  const n = properName(s);
+  return /^(Dr\.|Prof\.)/.test(n) ? n : "Dr. " + n;
+}
+function isActive(c){ return !DROPPED.includes(c.status); }
+
+/* ---------- routing ---------- */
+const ROUTES = {today:"today",add:"add",cases:"cases",dashboard:"dash",settings:"settings",changes:"changes"};
+let curView = "today";
+function route(){
+  const h = (location.hash||"#today").slice(1);
+  const v = ROUTES[h] || "today";
+  document.querySelectorAll(".view").forEach(e=>e.classList.toggle("on", e.id==="v-"+v));
+  curView = v; document.body.className = "v-"+v;
+  document.querySelectorAll("#tabs a").forEach(a=>a.classList.toggle("on", a.dataset.v===(v==="changes"?"settings":v)));
+  window.scrollTo(0,0);
+  renderView(v);
+}
+function current(){ return curView; }
+function renderView(v){
+  v = v || current();
+  if(v==="today") renderToday();
+  else if(v==="cases") renderCases();
+  else if(v==="dash") renderDash();
+  else if(v==="settings") renderSettings();
+  else if(v==="changes") renderChanges();
+}
+window.addEventListener("hashchange", route);
+
+/* ---------- case form ---------- */
+function formHtml(c, prefix){
+  const p = prefix;
+  const unitOpts = settings.units.map(u=>`<option ${c.unit===u?"selected":""}>${esc(u)}</option>`).join("") + (c.unit && !settings.units.includes(c.unit) ? `<option selected>${esc(c.unit)}</option>`:"");
+  const scanOpts = settings.scanTypes.map(u=>`<option ${c.scanType===u?"selected":""}>${esc(u)}</option>`).join("") + (c.scanType && !settings.scanTypes.includes(c.scanType) ? `<option selected>${esc(c.scanType)}</option>`:"");
+  const cOpts = COUNTRIES.map(x=>`<option ${ (c.country||"India")===x?"selected":""}>${x}</option>`).join("") + (c.country && !COUNTRIES.includes(c.country) ? `<option selected>${esc(c.country)}</option>`:"");
+  const docs = [...new Set(cases.map(x=>x.referredBy).filter(Boolean))].sort();
+  const type = classify(c.country);
+  const auto = (c.amount===undefined || c.amount===null || c.amount==="" || Number(c.amount)===tariffFor(type));
+  const amt = auto ? tariffFor(type) : Number(c.amount);
+  const disc = Number(c.discount)||0;
+  return `
+  <div class="grid2">
+    <div class="sect">Patient</div>
+    <div class="full"><label>Patient name *</label><input name="name" required value="${esc(c.name)}" autocomplete="off"></div>
+    <div><label>Age (years)</label><input name="age" inputmode="numeric" value="${esc(c.age)}"></div>
+    <div><label>Gender</label><select name="gender">${["","Male","Female","Other"].map(g=>`<option value="${g}" ${c.gender===g?"selected":""}>${g||"–"}</option>`).join("")}</select></div>
+    <div><label>UHID</label><input name="uhid" value="${esc(c.uhid)}" autocapitalize="characters"></div>
+    <div><label>Phone</label><input name="phone" inputmode="tel" value="${esc(c.phone)}"></div>
+    <div><label>Country</label><select name="country" id="${p}country">${cOpts}</select></div>
+    <div><label>Patient type</label><div style="padding:11px 0"><span class="badge dot ${TYPE_CLS[type]}" id="${p}typeBadge">${type}</span></div></div>
+    <div class="full"><div class="note" id="${p}repeat"></div></div>
+    <div class="sect">Referral</div>
+    <div class="full"><label>Referred by (doctor)</label><input name="referredBy" list="${p}docs" value="${esc(c.referredBy)}"><datalist id="${p}docs">${docs.map(d=>`<option value="${esc(d)}">`).join("")}</datalist></div>
+    <div class="full"><label>Referring unit</label><select name="unit">${unitOpts}</select></div>
+    <div class="full"><label>Referred to</label><input name="referredTo" value="${esc(c.referredTo || settings.referredTo)}"></div>
+    <div class="sect">Appointment</div>
+    <div><label>Date *</label><input type="date" name="date" required value="${esc(c.date || today())}"></div>
+    <div><label>Time</label><input type="time" name="time" value="${esc(c.time)}"></div>
+    <div><label>Scan type</label><select name="scanType">${scanOpts}</select></div>
+    <div><label>Status</label><select name="status">${STATUSES.map(s=>`<option ${ (c.status||"Scheduled")===s?"selected":""}>${s}</option>`).join("")}</select></div>
+    <div class="full"><label>Diagnosis / indication</label><input name="diagnosis" value="${esc(c.diagnosis)}"></div>
+    <div class="full"><label>Scan purpose</label><select name="visitType" id="${p}visit">${VISIT_TYPES.map(v=>`<option ${c.visitType===v?"selected":""}>${v}</option>`).join("")}</select></div>
+    <div class="sect">Billing</div>
+    <div class="full"><label>Billing category</label><select name="billing">${["",...BILLING].map(v=>`<option value="${v}" ${c.billing===v?"selected":""}>${v||"–"}</option>`).join("")}</select></div>
+    <div><label>Amount (₹)</label><input name="amount" id="${p}amt" class="money" inputmode="decimal" data-auto="${auto?1:0}" value="${fmtNum(amt)}"></div>
+    <div><label>Discount (₹)</label><input name="discount" id="${p}disc" class="money" inputmode="decimal" placeholder="0.00" value="${disc?fmtNum(disc):""}"></div>
+    <div class="full note" id="${p}tariffNote" style="margin-top:-4px">${auto?`Standard ${type==="Domestic"?"domestic":"international"} tariff applied`:"Amount entered manually"}</div>
+    <div class="balbox"><span class="bl">Balance payable</span><span class="bv" id="${p}bal">${fmtAcc(amt-disc)}</span></div>
+    <div class="sect">Notes</div>
+    <div class="full"><textarea name="notes" placeholder="Anything the team should know">${esc(c.notes)}</textarea></div>
+  </div>`;
+}
+function bindRepeat(prefix, form, selfId){
+  const u = form.elements.uhid, note = $(prefix+"repeat"), vis = $(prefix+"visit");
+  const chk = (auto)=>{
+    const v = u.value.trim().toUpperCase(); if(!v){ note.textContent=""; return; }
+    const prev = cases.filter(x=>x.uhid===v && x.id!==selfId && isActive(x)).sort((a,b)=>b.date.localeCompare(a.date));
+    note.innerHTML = prev.length ? `<b style="color:var(--amber)">Repeat patient</b> · ${prev.length} earlier scan${prev.length>1?"s":""}, last ${fmtD(prev[0].date)}` : "";
+    if(auto && prev.length && vis.value===VISIT_TYPES[0]) vis.value = VISIT_TYPES[1];
+  };
+  u.addEventListener("input", ()=>chk(true)); u.addEventListener("change", ()=>chk(true)); chk(false);
+  form._chkRepeat = ()=>chk(true);
+}
+function bindTypeBadge(prefix){
+  const sel = $(prefix+"country"), b = $(prefix+"typeBadge");
+  const amt = $(prefix+"amt"), disc = $(prefix+"disc"), bal = $(prefix+"bal"), tn = $(prefix+"tariffNote");
+  if(!sel) return;
+  const frm = sel.form;
+  if(frm){
+    const nm = frm.elements.name, dr = frm.elements.referredBy;
+    if(nm) nm.addEventListener("blur", ()=>{ const v = properName(nm.value); if(v!==nm.value) nm.value = v; });
+    if(dr) dr.addEventListener("blur", ()=>{ if(dr.value.trim()){ const v = properDoctor(dr.value); if(v!==dr.value) dr.value = v; } });
+  }
+  const recalc = ()=>{ const a = parseMoney(amt.value)||0, d = parseMoney(disc.value)||0; bal.textContent = fmtAcc(a-d); bal.classList.toggle("neg", a-d<0); disc.classList.toggle("neg", d>a); };
+  sel.addEventListener("change", ()=>{
+    const t = classify(sel.value); b.textContent=t; b.className="badge dot "+TYPE_CLS[t];
+    if(amt.dataset.auto==="1"){ amt.value = fmtNum(tariffFor(t)); tn.textContent = `Standard ${t==="Domestic"?"domestic":"international"} tariff applied`; recalc(); }
+  });
+  [amt,disc].forEach(el=>{
+    el.addEventListener("focus", ()=>{ const v = parseMoney(el.value); el.value = v==null ? "" : String(v); });
+    el.addEventListener("blur", ()=>{ const v = parseMoney(el.value); el.value = v==null ? "" : fmtNum(v); recalc(); });
+    el.addEventListener("input", recalc);
+  });
+  amt.addEventListener("input", ()=>{ amt.dataset.auto="0"; tn.textContent = "Amount entered manually"; });
+  recalc();
+}
+function readForm(form){
+  const fd = new FormData(form); const o = {};
+  for(const [k,v] of fd.entries()) o[k] = String(v).trim();
+  o.age = o.age==="" ? null : (isNaN(parseFloat(o.age)) ? null : Math.round(parseFloat(o.age)));
+  o.name = properName(o.name);
+  o.referredBy = o.referredBy ? properDoctor(o.referredBy) : "";
+  o.uhid = o.uhid.toUpperCase();
+  o.amount = parseMoney(o.amount);
+  o.discount = parseMoney(o.discount) || 0;
+  o.net = o.amount==null ? null : Math.round((o.amount - o.discount)*100)/100;
+  o.patientType = classify(o.country);
+  return o;
+}
+function renderAddForm(c){
+  const f = $("caseForm");
+  f.innerHTML = formHtml(c||{}, "a_") + `<div class="row" style="margin-top:12px"><button type="submit" id="saveCase">Save case</button><button type="button" class="ghost" id="resetForm">Discard changes</button></div>`;
+  bindTypeBadge("a_"); bindRepeat("a_", f, null);
+  $("resetForm").onclick = async ()=>{
+    const dirty = [...f.elements].some(el=>el.name && el.classList.contains("filled")) || (f.elements.name && f.elements.name.value) || pendingFiles.length || $("waText").value.trim();
+    if(dirty && !(await confirmDlg("Discard everything entered on this form?","Discard"))) return;
+    queue=[]; updateQueueLbl(); renderAddForm({}); clearFiles(); $("waText").value=""; $("waState").innerHTML="";
+  };
+}
+$("caseForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  if(!db){ toast("Not connected – sign in to claude.ai to save"); return; }
+  const o = readForm(e.target);
+  if(!o.name){ toast("Patient name is required"); return; }
+  if(o.amount!=null && o.discount>o.amount){ toast("Discount is more than the amount"); return; }
+  const dup = o.uhid && cases.find(x=>x.uhid===o.uhid && x.date===o.date && isActive(x));
+  if(dup && !(await confirmDlg(`A case for UHID ${o.uhid} already exists on ${fmtD(o.date)} (${dup.name}). Save another?`,"Save anyway"))) return;
+  const btn = $("saveCase"); btn.disabled = true;
+  const uid = user ? await user.id() : null;
+  const now = new Date().toISOString();
+  o.createdAt = now; o.updatedAt = now; o.createdBy = uid; o.source = pendingFiles.length ? "ai" : ($("waText").value.trim() ? "whatsapp" : "manual");
+  o.history = [{s:o.status, at:now, by:uid}]; o.prep = {};
+  try{
+    const ref = await db.collection("cases").add(o);
+    await logChange("add", ref && ref.id, null, o);
+    toast("Case saved");
+    if(queue.length){ const nx = queue.shift(); applyAi(nx, $("waState")); return; }
+    renderAddForm({}); clearFiles(); $("waText").value=""; $("waState").innerHTML=""; updateQueueLbl();
+    $("dayPick").value = o.date; location.hash = "#today";
+  }catch(err){ handleWriteErr(err); }
+  finally{ btn.disabled = false; }
+});
+
+/* ---------- uploads + AI reading ---------- */
+const drop = $("drop"), fileIn = $("fileIn");
+drop.addEventListener("dragover", e=>{e.preventDefault();drop.classList.add("over")});
+drop.addEventListener("dragleave", ()=>drop.classList.remove("over"));
+drop.addEventListener("drop", e=>{e.preventDefault();drop.classList.remove("over");addFiles(e.dataTransfer.files)});
+fileIn.onchange = ()=>{ addFiles(fileIn.files); fileIn.value=""; };
+document.querySelectorAll(".camIn").forEach(inp=>inp.onchange=()=>{ addFiles(inp.files, inp.dataset.src); inp.value=""; });
+$("clearFiles").onclick = clearFiles;
+function clearFiles(){ pendingFiles.forEach(f=>URL.revokeObjectURL(f.url)); pendingFiles=[]; pendingSrc.clear(); renderThumbs(); $("aiState").innerHTML=""; }
+function renderThumbs(){
+  $("thumbs").innerHTML = pendingFiles.map(f=>`<img src="${f.url}" alt="page">`).join("");
+  $("readBtn").disabled = !pendingFiles.length || !sample;
+}
+async function addFiles(list, src){
+  if(src) pendingSrc.add(src); else pendingSrc.add("file");
+  const files = [...list].slice(0, 4);
+  $("aiState").innerHTML = `<div class="ai"><div class="spin"></div>Preparing files…</div>`;
+  try{
+    for(const f of files){
+      if(pendingFiles.length>=4) break;
+      if(f.type==="application/pdf" || /\.pdf$/i.test(f.name)){
+        const pages = await pdfToBlobs(f, 4-pendingFiles.length);
+        pages.forEach(b=>pendingFiles.push({blob:b,url:URL.createObjectURL(b)}));
+      } else if(f.type.startsWith("image/")){
+        const b = await shrink(f);
+        pendingFiles.push({blob:b,url:URL.createObjectURL(b)});
+      }
+    }
+    $("aiState").innerHTML = sample ? "" : `<div class="warn" style="margin-top:10px">Automatic reading isn't available in this view. Fill in the details below by hand.</div>`;
+  }catch(err){
+    console.error(err);
+    $("aiState").innerHTML = `<div class="err" style="margin-top:10px">Couldn't open that file. Try a photo (JPG/PNG) instead.</div>`;
+  }
+  renderThumbs();
+}
+async function shrink(file, max=1800){
+  let bmp;
+  try{ bmp = await createImageBitmap(file); }
+  catch(e){ bmp = await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=URL.createObjectURL(file); }); }
+  const w = bmp.width, h = bmp.height, s = Math.min(1, max/Math.max(w,h));
+  const cv = document.createElement("canvas"); cv.width = Math.round(w*s); cv.height = Math.round(h*s);
+  cv.getContext("2d").drawImage(bmp,0,0,cv.width,cv.height);
+  return await new Promise(r=>cv.toBlob(r,"image/jpeg",0.85));
+}
+function loadScript(src){ return new Promise((res,rej)=>{ const s=document.createElement("script"); s.src=src; s.onload=res; s.onerror=rej; document.head.appendChild(s); }); }
+let pdfReady = null;
+async function ensurePdf(){
+  if(!pdfReady) pdfReady = (async()=>{
+    await loadScript("https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js");
+    await loadScript("https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js"); // runs in page (no cross-origin worker)
+  })();
+  return pdfReady;
+}
+async function pdfToBlobs(file, maxPages){
+  await ensurePdf();
+  const lib = window.pdfjsLib;
+  const doc = await lib.getDocument({data: new Uint8Array(await file.arrayBuffer()), isEvalSupported:false}).promise;
+  const out = [];
+  for(let i=1;i<=Math.min(doc.numPages,maxPages);i++){
+    const pg = await doc.getPage(i);
+    const vp0 = pg.getViewport({scale:1}); const scale = Math.min(2.2, 1800/Math.max(vp0.width,vp0.height));
+    const vp = pg.getViewport({scale});
+    const cv = document.createElement("canvas"); cv.width=Math.round(vp.width); cv.height=Math.round(vp.height);
+    const ctx = cv.getContext("2d"); ctx.fillStyle="#fff"; ctx.fillRect(0,0,cv.width,cv.height);
+    await pg.render({canvasContext:ctx, viewport:vp}).promise;
+    out.push(await new Promise(r=>cv.toBlob(r,"image/jpeg",0.85)));
+  }
+  return out;
+}
+let aiAbort = null;
+let queue = []; // remaining parsed cases from a WhatsApp message
+function fieldSpec(){ return `{
+ "name": patient's full name as written, or null,
+ "age": age in whole years as a number, or null,
+ "gender": "Male" | "Female" | "Other" | null,
+ "uhid": the hospital UHID / MRN / IP / registration number exactly as written (Apollo UHIDs often look like "APJ1.0000123456"), or null,
+ "referredBy": the referring / treating doctor's name with "Dr." prefix, or null,
+ "referringUnitRaw": the hospital, clinic or unit the referral comes from as written, or null,
+ "unitMatch": the closest item from this exact list, or null if none clearly fits: ${JSON.stringify(settings.units)},
+ "country": the patient's country (nationality or address). Clues: Bangladeshi address/district (Dhaka, Chittagong, Khulna, Sylhet, Rajshahi...), the word Bangladesh/BD/Bangladeshi, phone +880 = "Bangladesh"; +977 "Nepal"; +975 "Bhutan"; +94 "Sri Lanka"; +960 "Maldives"; +93 "Afghanistan"; +92 "Pakistan"; Indian address or +91 = "India". null if no clue,
+ "phone": patient or attender phone number, or null,
+ "diagnosis": short diagnosis / indication, or null,
+ "scanMatch": closest item from this exact list, or null: ${JSON.stringify(settings.scanTypes)},
+ "appointmentDate": "YYYY-MM-DD" if a PET-CT appointment/scan date is stated (today is ${today()}; resolve words like "tomorrow"), else null,
+ "appointmentTime": "HH:MM" 24-hour if a time is stated, else null,
+ "uncertain": array of field names you could not read confidently
+}`; }
+$("readBtn").onclick = async ()=>{
+  if(!sample || !pendingFiles.length) return;
+  const btn = $("readBtn"); btn.disabled = true;
+  $("aiState").innerHTML = `<div class="ai"><div class="spin"></div>Reading the document…</div>`;
+  aiAbort = new AbortController();
+  const prompt = `You are reading ${pendingFiles.length>1?"pages of ":""}a hospital case sheet, prescription or referral note (it may be a scanned or photographed document, printed or handwritten) for a PET-CT booking at Apollo Cancer Centres, Vanagaram, Chennai, India.${pendingSrc.has("screen")?`
+Some images are camera photos of ANOTHER phone or computer screen (e.g. a WhatsApp chat, an e-mail, a hospital system or a PDF viewer). Ignore screen glare, moiré lines, status bars, chat timestamps and app buttons; read only the patient/referral content. If it shows several patients, return each one.`:""}${pendingSrc.has("paper")?`
+Some images are camera photos of printed paper; they may be tilted, curled or slightly blurred.`:""}
+
+Usually there is one patient; if the images clearly show several different patients, list each. Reply with ONE JSON object only, no other text, of the form {"cases":[ ... ]} where each item is:
+${fieldSpec()}
+Never invent values. If unsure, use null.`;
+  try{
+    let res;
+    const opts = {images: pendingFiles.map(f=>f.blob), signal: aiAbort.signal, modelTier:"default", cache:false};
+    if(typeof sample.json === "function") res = await sample.json(prompt, opts);
+    else { const r = await sample(prompt, opts); res = JSON.parse((r.text.match(/\{[\s\S]*\}/)||["{}"])[0]); }
+    const list = Array.isArray(res) ? res : (res && Array.isArray(res.cases) ? res.cases : (res && res.name ? [res] : []));
+    if(!list.length){ $("aiState").innerHTML = `<div class="warn" style="margin-top:10px">No patient details found. Try a clearer photo, or enter the details by hand.</div>`; return; }
+    queue = list.slice(1);
+    applyAi(list[0]);
+    if(queue.length) $("aiState").innerHTML += `<div class="note">Found ${list.length} patients. After you save this one, the next will be filled in automatically.</div>`;
+  }catch(err){
+    console.error(err);
+    const code = err && err.code;
+    $("aiState").innerHTML = `<div class="err" style="margin-top:10px">${code==="rate_limited"?"Too many reads just now – wait a minute and try again.":code==="not_granted"?"Automatic reading was not allowed. Enter the details by hand.":"Couldn't read this document. Try a clearer, well-lit photo, or enter the details by hand."}</div>`;
+  }finally{ btn.disabled = false; }
+};
+function applyAi(r, stateEl){
+  stateEl = stateEl || $("aiState");
+  renderAddForm({});
+  const f = $("caseForm");
+  const set = (n,v) => { if(v===null||v===undefined||v==="") return; const el=f.elements[n]; if(!el) return;
+    if(el.tagName==="SELECT" && ![...el.options].some(o=>o.value===String(v))){ const o=document.createElement("option"); o.textContent=v; el.appendChild(o); }
+    el.value = v; el.classList.add("filled"); };
+  set("name", r.name ? properName(r.name) : null);
+  set("age", r.age);
+  set("gender", r.gender);
+  set("uhid", r.uhid ? String(r.uhid).toUpperCase() : null);
+  if(f._chkRepeat) f._chkRepeat();
+  set("phone", r.phone);
+  set("referredBy", r.referredBy ? properDoctor(r.referredBy) : null);
+  if(r.unitMatch && settings.units.includes(r.unitMatch)) set("unit", r.unitMatch);
+  if(r.scanMatch && settings.scanTypes.includes(r.scanMatch)) set("scanType", r.scanMatch);
+  if(r.country){ const c = COUNTRIES.find(x=>x.toLowerCase()===String(r.country).toLowerCase()) || r.country; set("country", c); f.elements.country.dispatchEvent(new Event("change")); }
+  set("diagnosis", r.diagnosis);
+  if(r.appointmentDate && /^\d{4}-\d{2}-\d{2}$/.test(r.appointmentDate)) set("date", r.appointmentDate);
+  if(r.appointmentTime && /^\d{1,2}:\d{2}$/.test(r.appointmentTime)) set("time", r.appointmentTime.padStart(5,"0"));
+  if(r.referringUnitRaw && !(r.unitMatch && settings.units.includes(r.unitMatch))){
+    const n = f.elements.notes; n.value = (n.value? n.value+"\n":"") + "Referring unit on document: " + r.referringUnitRaw; n.classList.add("filled");
+  }
+  f.elements.referredTo.value = settings.referredTo;
+  const unc = Array.isArray(r.uncertain) && r.uncertain.length ? ` Please double-check: <b>${esc(r.uncertain.join(", "))}</b>.` : "";
+  stateEl.innerHTML = `<div class="ok" style="margin-top:10px">Details filled in (highlighted). Check them before saving.${unc}</div>`;
+  updateQueueLbl();
+  $("formCard").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function updateQueueLbl(){ const l=$("queueLbl"); if(queue.length){ l.style.display="inline-block"; l.textContent = queue.length+" more from message"; } else l.style.display="none"; }
+$("waClear").onclick = ()=>{ $("waText").value=""; $("waState").innerHTML=""; queue=[]; updateQueueLbl(); };
+$("waBtn").onclick = async ()=>{
+  const txt = $("waText").value.trim();
+  if(!txt){ toast("Paste a WhatsApp message first"); return; }
+  if(!sample){ $("waState").innerHTML = `<div class="warn" style="margin-top:10px">Automatic reading isn't available in this view. Enter the details by hand.</div>`; return; }
+  const btn=$("waBtn"); btn.disabled=true;
+  $("waState").innerHTML = `<div class="ai"><div class="spin"></div>Reading the message…</div>`;
+  const prompt = `Below is a WhatsApp message (or several forwarded messages) posted in the PET-CT referral group of Apollo Cancer Centres, Vanagaram, Chennai, India. It may describe one or more patients being referred or booked for PET-CT, in English, Tamil-English mix or short forms (e.g. "Pt", "Ref by", "Y/M", "F/56", "BD pt").
+
+Find every distinct patient. Reply with ONE JSON object only, no other text, of the form {"cases":[ ... ]} where each item is:
+${fieldSpec()}
+Never invent values; use null for anything not stated. If there is no patient in the message, reply {"cases":[]}.
+
+MESSAGE:
+"""
+${txt.slice(0,8000)}
+"""`;
+  try{
+    let res;
+    const opts = {modelTier:"default", cache:false};
+    if(typeof sample.json==="function") res = await sample.json(prompt, opts);
+    else { const r = await sample(prompt, opts); res = JSON.parse((r.text.match(/\{[\s\S]*\}/)||["{}"])[0]); }
+    const list = Array.isArray(res) ? res : (res && Array.isArray(res.cases) ? res.cases : (res && res.name ? [res] : []));
+    if(!list.length){ $("waState").innerHTML = `<div class="warn" style="margin-top:10px">No patient details found in that message.</div>`; return; }
+    queue = list.slice(1);
+    applyAi(list[0], $("waState"));
+    if(queue.length) $("waState").innerHTML += `<div class="note">Found ${list.length} patients. After you save this one, the next will be filled in automatically.</div>`;
+  }catch(err){
+    console.error(err);
+    $("waState").innerHTML = `<div class="err" style="margin-top:10px">${err&&err.code==="rate_limited"?"Too many reads just now – wait a minute and try again.":"Couldn't read that message. Check it and try again, or enter the details by hand."}</div>`;
+  }finally{ btn.disabled=false; }
+};
+
+/* ---------- change log / discard changes ---------- */
+let changes = [], chgFilter = "";
+const plain = c => { if(!c) return null; const o = JSON.parse(JSON.stringify(c)); delete o.id; return o; };
+const CHG_LABEL = {add:"Added case", edit:"Edited case", status:"Status change", prep:"Prep checklist", delete:"Deleted case", settings:"Settings changed", undo:"Undo"};
+async function logChange(kind, caseId, before, after, extra){
+  if(!db) return;
+  try{
+    const uid = user ? await user.id() : null;
+    await db.collection("changes").add({kind, caseId:caseId||null, name:(after&&after.name)||(before&&before.name)||"", before:plain(before), after:plain(after), at:new Date().toISOString(), by:uid, ...(extra||{})});
+    if(changes.length >= 200){ const old = changes.slice().sort((a,b)=>a.at.localeCompare(b.at)).slice(0, changes.length-199); for(const o of old){ try{ await db.doc("changes/"+o.id).delete(); }catch(e){} } }
+  }catch(e){ console.error("log", e); }
+}
+function chgDesc(ch){
+  const b=ch.before||{}, a=ch.after||{};
+  if(ch.kind==="status") return `${esc(b.status||"–")} → <b>${esc(a.status||"–")}</b>`;
+  if(ch.kind==="prep") return `Prep ${PREP.filter(([k])=>b.prep&&b.prep[k]).length}/${PREP.length} → <b>${PREP.filter(([k])=>a.prep&&a.prep[k]).length}/${PREP.length}</b>`;
+  if(ch.kind==="edit"){
+    const keys = ["name","age","gender","uhid","phone","country","referredBy","unit","referredTo","date","time","scanType","status","diagnosis","visitType","billing","amount","notes"];
+    const diff = keys.filter(k=>String(b[k]??"")!==String(a[k]??""));
+    return diff.length ? diff.slice(0,4).map(k=>`${esc(k)}: ${esc(String(b[k]??"–")).slice(0,30)} → <b>${esc(String(a[k]??"–")).slice(0,30)}</b>`).join("<br>") + (diff.length>4?`<br>+${diff.length-4} more`:"") : "No field changed";
+  }
+  if(ch.kind==="add") return `${fmtD(a.date)} · ${esc(a.unit||"")}`;
+  if(ch.kind==="delete") return `${fmtD(b.date)} · UHID ${esc(b.uhid||"–")}`;
+  if(ch.kind==="settings") return "Units, target or other settings";
+  if(ch.kind==="undo") return `Undid: ${esc(CHG_LABEL[ch.undoOf]||"")}`;
+  return "";
+}
+function renderChanges(){
+  const kinds = ["","add","edit","status","prep","delete","settings"];
+  $("chgChips").innerHTML = kinds.map(k=>`<span class="chip ${chgFilter===k?"on":""}" data-k="${k}">${k?CHG_LABEL[k]:"All"}</span>`).join("");
+  $("chgChips").querySelectorAll(".chip").forEach(c=>c.onclick=()=>{ chgFilter=c.dataset.k; renderChanges(); });
+  const list = changes.filter(c=>!chgFilter || c.kind===chgFilter).sort((a,b)=>b.at.localeCompare(a.at)).slice(0,100);
+  loadProfiles(list.map(c=>c.by).filter(Boolean)).then(()=>{
+    $("chgList").innerHTML = !db ? `<div class="empty">Sign in to see changes.</div>` : list.length ? list.map(ch=>`
+      <div class="case" style="cursor:default">
+        <div class="grow">
+          <div class="nm">${esc(CHG_LABEL[ch.kind]||ch.kind)}${ch.name?` · ${esc(ch.name)}`:""}</div>
+          <div class="mt">${chgDesc(ch)}</div>
+          <div class="mt">${new Date(ch.at).toLocaleString("en-IN",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}${ch.by?" · "+esc(pname(ch.by)):""}${ch.undone?` · <span class="badge b-Cancelled">Undone</span>`:""}</div>
+        </div>
+        ${ch.kind!=="undo" && !ch.undone && canWrite ? `<button class="danger sm undo" data-id="${ch.id}">Undo</button>`:""}
+      </div>`).join("") : `<div class="empty">No changes yet.</div>`;
+    $("chgList").querySelectorAll(".undo").forEach(b=>b.onclick=()=>undoChange(b.dataset.id));
+  });
+}
+async function undoChange(id){
+  const ch = changes.find(x=>x.id===id); if(!ch || !db) return;
+  const uid = user ? await user.id() : null; const now = new Date().toISOString();
+  try{
+    if(ch.kind==="settings"){
+      if(!(await confirmDlg("Put the settings back the way they were before this change?","Undo"))) return;
+      await db.doc("config/settings").set(ch.before || DEFAULT_SETTINGS);
+    } else {
+      const cur = cases.find(x=>x.id===ch.caseId);
+      const later = cur && ch.after && cur.updatedAt && ch.after.updatedAt && cur.updatedAt > ch.after.updatedAt;
+      let msg;
+      if(ch.kind==="add") msg = `Remove the case for ${ch.name}? It was added by mistake.`;
+      else if(ch.kind==="delete") msg = `Bring back the deleted case for ${ch.name}?`;
+      else msg = `Put ${ch.name}'s case back the way it was before this change?`;
+      if(later) msg += " Note: this case was changed again after this – those later changes will also be undone.";
+      if(!(await confirmDlg(msg,"Undo"))) return;
+      if(ch.kind==="add"){ await db.doc("cases/"+ch.caseId).delete(); }
+      else {
+        const restored = {...ch.before, updatedAt:now};
+        const hist = Array.isArray(restored.history)?restored.history.slice(-30):[];
+        hist.push({s:"Undo: "+(CHG_LABEL[ch.kind]||ch.kind), at:now, by:uid}); restored.history = hist;
+        await db.doc("cases/"+ch.caseId).set(restored);
+      }
+    }
+    await db.doc("changes/"+id).update({undone:true, undoneAt:now, undoneBy:uid});
+    await db.collection("changes").add({kind:"undo", undoOf:ch.kind, caseId:ch.caseId||null, name:ch.name||"", at:now, by:uid});
+    toast("Change undone");
+  }catch(err){ handleWriteErr(err); }
+}
+
+/* ---------- today ---------- */
+$("dayPick").value = today();
+$("dayPick").onchange = renderToday;
+$("dPrev").onclick = ()=>{ $("dayPick").value = addDays($("dayPick").value||today(), -1); renderToday(); };
+$("dNext").onclick = ()=>{ $("dayPick").value = addDays($("dayPick").value||today(), 1); renderToday(); };
+$("goToday").onclick = ()=>{ $("dayPick").value = today(); renderToday(); };
+$("goTom").onclick = ()=>{ $("dayPick").value = addDays(today(),1); renderToday(); };
+function hAt(c, st){ const h=(c.history||[]).find(x=>x.s===st); return h ? new Date(h.at) : null; }
+function typeCounts(list){ const o={}; TYPES.forEach(t=>o[t]=0); list.forEach(c=>o[c.patientType||classify(c.country)]++); return o; }
+function renderToday(){
+  const d = $("dayPick").value || today();
+  const all = cases.filter(c=>c.date===d);
+  const act = all.filter(isActive);
+  const tc = typeCounts(act);
+  const done = act.filter(c=>DONE.includes(c.status)).length;
+  const dayNet = act.reduce((s,c)=>s+(typeof c.net==="number"?c.net:(typeof c.amount==="number"?c.amount-(Number(c.discount)||0):0)),0);
+  const dayDisc = act.reduce((s,c)=>s+(Number(c.discount)||0),0);
+  const dropped = all.length-act.length;
+  $("dayKpis").innerHTML = `
+    <div class="hero">
+      <div><div class="hl">${d===today()?"Today":DOW[parseYmd(d).getDay()]+", "+fmtD(d)}</div><div class="hv">${act.length}</div><div class="hs">cases booked</div></div>
+      <div class="hstats">
+        <div><b>${done}</b><span>Scans done</span></div>
+        <div><b>${act.length-done}</b><span>Pending</span></div>
+        <div><b>${dropped}</b><span>Cancelled</span></div>
+      </div>
+    </div>
+    <div class="kpi"><div class="l">Domestic</div><div class="v">${tc["Domestic"]}</div></div>
+    <div class="kpi gold"><div class="l">Bangladesh</div><div class="v">${tc["International – Bangladesh"]}</div></div>
+    <div class="kpi gold"><div class="l">Other SAARC</div><div class="v">${tc["International – Other SAARC"]}</div></div>
+    <div class="kpi blue"><div class="l">Non-SAARC</div><div class="v">${tc["International – Non-SAARC"]}</div></div>
+    <div class="kpi green wide"><div class="row" style="justify-content:space-between;align-items:flex-end"><div><div class="l">Billing · balance</div><div class="v" style="font-size:24px">${fmtAcc(dayNet)}</div></div><div class="x" style="text-align:right">Discount<br><b style="color:var(--red)">${fmtAcc(-dayDisc)}</b></div></div></div>`;
+  // planning card for today / future dates
+  const pc = $("planCard");
+  if(d>=today() && act.length){
+    const byScan = {}; act.forEach(c=>{ const k=c.scanType||"Not specified"; byScan[k]=(byScan[k]||0)+1; });
+    const notReady = act.filter(c=>!DONE.includes(c.status) && prepDone(c)<PREP.length);
+    const unconf = act.filter(c=>c.status==="Scheduled");
+    const slots = act.filter(c=>c.time).map(c=>c.time).sort();
+    pc.classList.remove("hidden");
+    pc.innerHTML = `<h3>${d===today()?"Today's":"Day"} planning · ${fmtD(d)}</h3>
+      <div class="grid2">
+        <div><div class="note">Doses / studies</div>${Object.entries(byScan).sort((a,b)=>b[1]-a[1]).map(([k,n])=>`<div class="row" style="padding:3px 0"><span class="grow">${esc(k)}</span><b>${n}</b></div>`).join("")}
+          <div class="row" style="padding:3px 0;border-top:1px solid var(--line);margin-top:3px"><span class="grow"><b>Total</b></span><b>${act.length}</b></div></div>
+        <div><div class="note">Slots</div><div>${slots.length?`First ${fmtTime(slots[0])} · last ${fmtTime(slots[slots.length-1])}`:"No times entered"}</div>
+          <div class="note" style="margin-top:8px">${act.length-slots.length} without a time</div></div>
+      </div>
+      ${notReady.length?`<div class="warn" style="margin:10px 0 0"><b>Prep incomplete (${notReady.length}):</b> ${notReady.map(c=>esc(c.name)+" ("+prepDone(c)+"/"+PREP.length+")").join(", ")}</div>`:`<div class="ok" style="margin:10px 0 0">Prep complete for all patients.</div>`}
+      ${unconf.length?`<div class="note" style="margin-top:8px"><b>Still "Scheduled" – call to confirm:</b> ${unconf.map(c=>esc(c.name)).join(", ")}</div>`:""}`;
+  } else pc.classList.add("hidden");
+  // reports pending > 24h (all dates)
+  const now = Date.now();
+  const pend = cases.filter(c=>c.status==="Scan Done").map(c=>({c, t:hAt(c,"Scan Done")})).filter(x=>x.t && now-x.t.getTime()>24*3600e3).sort((a,b)=>a.t-b.t);
+  const pr = $("pendRep");
+  if(pend.length){ pr.classList.remove("hidden"); pr.innerHTML = `<h3 style="color:var(--red)">Reports pending over 24 hours · ${pend.length}</h3>${pend.slice(0,10).map(x=>`<div class="row" style="padding:4px 0;border-top:1px solid var(--line)"><span class="grow">${esc(x.c.name)} <span class="note">· ${fmtD(x.c.date)}</span></span><b>${Math.round((now-x.t.getTime())/3600e3)} h</b></div>`).join("")}`; }
+  else pr.classList.add("hidden");
+  const counts = {}; STATUSES.forEach(s=>counts[s]=all.filter(c=>c.status===s).length);
+  $("dayStatusChips").innerHTML = [`<span class="chip ${dayStatusFilter===""?"on":""}" data-s="">All ${all.length}</span>`]
+    .concat(STATUSES.filter(s=>counts[s]).map(s=>`<span class="chip ${dayStatusFilter===s?"on":""}" data-s="${s}">${s} ${counts[s]}</span>`)).join("");
+  $("dayStatusChips").querySelectorAll(".chip").forEach(ch=>ch.onclick=()=>{dayStatusFilter=ch.dataset.s;renderToday();});
+  const list = all.filter(c=>!dayStatusFilter || c.status===dayStatusFilter).sort((a,b)=>(a.time||"99").localeCompare(b.time||"99"));
+  $("dayList").innerHTML = !loaded ? `<div class="empty"><div class="spin" style="margin:0 auto 8px"></div>Loading…</div>`
+    : list.length ? list.map(c=>caseRow(c,true)).join("") : `<div class="empty">No appointments for ${fmtD(d)}.<br><a href="#add">Add a case</a></div>`;
+  bindRows($("dayList"));
+}
+function caseRow(c, showNext){
+  const t = c.patientType||classify(c.country);
+  const nextS = ACTIVE_FLOW[ACTIVE_FLOW.indexOf(c.status)+1];
+  const ini = String(c.name||"?").replace(/^(mr|mrs|ms|miss|master|baby|dr)\.?\s+/i,"").split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+  const net = typeof c.net==="number" ? c.net : (typeof c.amount==="number" ? c.amount-(Number(c.discount)||0) : null);
+  return `<div class="case" data-id="${c.id}">
+    ${showNext ? `<div class="tm">${c.time?esc(fmtTime(c.time)).replace(" ","<br>"):"<span class='note'>—</span>"}</div>` : ""}
+    <div class="av" style="background:${TYPE_COL[t]}">${esc(ini)}</div>
+    <div class="grow" style="min-width:0">
+      <div class="row" style="gap:6px;flex-wrap:nowrap"><div class="nm grow" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(c.name)}${c.age!=null?` <span class="note" style="font-weight:500">${esc(c.age)}${c.gender?esc(c.gender[0]):""}</span>`:""}</div>${net!=null?`<span class="amt">${fmtAcc(net)}</span>`:""}</div>
+      <div class="mt">${c.uhid?esc(c.uhid)+" · ":""}${esc(c.referredBy||"—")}</div>
+      <div class="mt">${showNext?"":fmtD(c.date)+" · "}${esc(c.unit||"")}</div>
+      <div class="bd"><span class="badge dot ${STATUS_CLS(c.status)}">${esc(c.status)}</span>${t!=="Domestic"?`<span class="badge ${TYPE_CLS[t]}">${TYPE_SHORT[t]}</span>`:""}${isActive(c)&&!DONE.includes(c.status)?`<span class="badge" style="${prepDone(c)===PREP.length?"":"background:#fdecea;color:var(--red)"}">Prep ${prepDone(c)}/${PREP.length}</span>`:""}${c.visitType&&c.visitType!==VISIT_TYPES[0]?`<span class="badge" style="background:#eef2f3;color:#40555a">${esc(c.visitType.split(" /")[0])}</span>`:""}</div>
+      ${showNext && nextS && canWrite ? `<div style="margin-top:9px"><button class="sec sm nx" data-id="${c.id}" data-s="${nextS}">Mark ${nextS} →</button></div>`:""}
+    </div>
+    <svg class="chev" width="10" height="16" viewBox="0 0 10 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l6 6-6 6"/></svg>
+  </div>`;
+}
+function bindRows(root){
+  root.querySelectorAll(".case").forEach(r=>r.onclick=e=>{ if(e.target.closest(".nx")) return; openCase(r.dataset.id); });
+  root.querySelectorAll(".nx").forEach(b=>b.onclick=async e=>{ e.stopPropagation(); b.disabled=true; await setStatus(b.dataset.id,b.dataset.s); });
+}
+async function setStatus(id, s){
+  const c = cases.find(x=>x.id===id); if(!c||!db) return;
+  const uid = user ? await user.id() : null; const now = new Date().toISOString();
+  const history = (Array.isArray(c.history)?c.history.slice(-30):[]).concat([{s, at:now, by:uid}]);
+  try{ const before = plain(c); await db.doc("cases/"+id).update({status:s, updatedAt:now, history}); toast(c.name+" → "+s);
+    await logChange("status", id, before, {...before, status:s, updatedAt:now, history}); }
+  catch(err){ handleWriteErr(err); }
+}
+
+/* ---------- WhatsApp snapshot ---------- */
+function daySummary(d){
+  const all = cases.filter(c=>c.date===d), act = all.filter(isActive);
+  const tc = typeCounts(act);
+  const st = {}; STATUSES.forEach(x=>st[x]=all.filter(c=>c.status===x).length);
+  const byUnit = {}; act.forEach(c=>{ const u=c.unit||"Not specified"; byUnit[u]=(byUnit[u]||0)+1; });
+  const byDoc = {}; act.forEach(c=>{ const k=(c.referredBy||"Not recorded").trim(); byDoc[k]=(byDoc[k]||0)+1; });
+  const dt = parseYmd(d), ms = ymd(new Date(dt.getFullYear(),dt.getMonth(),1)), fs = fyStart(dt);
+  const mtdList = cases.filter(c=>c.date>=ms && c.date<=d && isActive(c));
+  const fy = cases.filter(c=>c.date>=fs && c.date<=d && isActive(c)).length;
+  const mtdDays = []; for(let x=ms; x<=d; x=addDays(x,1)) mtdDays.push(x);
+  const mtdWork = mtdDays.filter(x=>parseYmd(x).getDay()!==0 || mtdList.some(c=>c.date===x)).length || 1;
+  const mtc = typeCounts(mtdList);
+  return { d, total:act.length, done:act.filter(c=>DONE.includes(c.status)).length, dropped:all.length-act.length, tc, st,
+    units:Object.entries(byUnit).sort((a,b)=>b[1]-a[1]), docs:Object.entries(byDoc).sort((a,b)=>b[1]-a[1]),
+    mtd:mtdList.length, mtdAvg:mtdList.length/mtdWork, mtdIntl:mtdList.length-mtc["Domestic"], mtdBD:mtc["International – Bangladesh"], fy,
+    target:Number(settings.monthlyTarget)||0, month:MON[dt.getMonth()]+" "+dt.getFullYear(),
+    milestone:(Number(settings.openingScans)||0)+cases.filter(c=>DONE.includes(c.status) && c.date<=d).length,
+    tomorrow:cases.filter(c=>c.date===addDays(d,1) && isActive(c)).length };
+}
+function summaryText(S){
+  const L = [];
+  L.push(`*PET-CT Daily Update – ${fmtD(S.d)} (${DOW[parseYmd(S.d).getDay()]})*`);
+  L.push(`Apollo Cancer Centres, Vanagaram`);
+  L.push(``);
+  L.push(`*Total cases: ${S.total}*  |  Scans done: ${S.done}  |  Pending: ${S.total-S.done}${S.dropped?`  |  Cancelled/No-show: ${S.dropped}`:""}`);
+  L.push(`Domestic: ${S.tc["Domestic"]}  |  Bangladesh: ${S.tc["International – Bangladesh"]}  |  Other SAARC: ${S.tc["International – Other SAARC"]}  |  Non-SAARC: ${S.tc["International – Non-SAARC"]}`);
+  if(S.units.length){ L.push(``); L.push(`*Unit-wise*`); S.units.forEach(([u,n])=>L.push(`• ${u}: ${n}`)); }
+  if(S.docs.length){ L.push(``); L.push(`*Referring doctors*`); S.docs.forEach(([u,n])=>L.push(`• ${u}: ${n}`)); }
+  L.push(``);
+  L.push(`*${S.month} to date: ${S.mtd}*${S.target?` / target ${S.target} (${pct(S.mtd,S.target)}%)`:""}  |  Avg ${f1(S.mtdAvg)}/day  |  Intl ${S.mtdIntl} (BD ${S.mtdBD})`);
+  L.push(`FY to date: ${S.fy}  |  Total scans completed: ${S.milestone.toLocaleString("en-IN")}`);
+  L.push(`Booked for tomorrow: ${S.tomorrow}`);
+  return L.join("\n");
+}
+async function drawSnapshot(S){
+  try{ await Promise.all([document.fonts.load("700 40px Carlito"), document.fonts.load("400 30px Carlito")]); }catch(e){}
+  const F = "Calibri, Carlito, 'Segoe UI', sans-serif";
+  const W = 1080, rows = Math.min(S.units.length,8), drows = Math.min(S.docs.length,6);
+  const H = 1100 + (rows? 160 + rows*54 : 0) + (drows? 160 + drows*54 : 0) + 200;
+  const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+  const g = cv.getContext("2d");
+  const rr = (x,y,w,h,r,fill)=>{ g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); g.fillStyle=fill; g.fill(); };
+  const T = (txt,x,y,size,col,wt="400",al="left")=>{ g.font=`${wt} ${size}px ${F}`; g.fillStyle=col; g.textAlign=al; g.textBaseline="alphabetic"; g.fillText(txt,x,y); };
+  const fit = (txt,max,size,wt)=>{ g.font=`${wt} ${size}px ${F}`; if(g.measureText(txt).width<=max) return txt; while(txt.length>3 && g.measureText(txt+"…").width>max) txt=txt.slice(0,-1); return txt+"…"; };
+  g.fillStyle="#f4f7f7"; g.fillRect(0,0,W,H);
+  const grd = g.createLinearGradient(0,0,W,260); grd.addColorStop(0,"#004f56"); grd.addColorStop(1,"#00727c");
+  g.fillStyle=grd; g.fillRect(0,0,W,250); g.fillStyle="#c99a2e"; g.fillRect(0,250,W,8);
+  T("PET-CT DAILY UPDATE",60,92,30,"#e9c46a","700");
+  T("Apollo Cancer Centres, Vanagaram",60,150,46,"#ffffff","700");
+  T(`${fmtD(S.d)}  ·  ${["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][parseYmd(S.d).getDay()]}`,60,205,34,"#d5eef0");
+  // hero
+  rr(60,300,W-120,250,28,"#ffffff");
+  T("Total cases",110,370,32,"#5f7176");
+  T(String(S.total),110,505,130,"#00727c","700");
+  const hx=[560,800]; const hv=[["Scans done",S.done,"#1f7a3f"],["Pending",S.total-S.done,"#a36200"]];
+  hv.forEach((h,i)=>{ T(h[0],hx[i],370,30,"#5f7176"); T(String(h[1]),hx[i],470,84,h[2],"700"); });
+  if(S.dropped) T(`Cancelled / no-show: ${S.dropped}`,560,520,28,"#b3261e");
+  // mix tiles
+  const tiles=[["Domestic",S.tc["Domestic"],"#00727c"],["Bangladesh",S.tc["International – Bangladesh"],"#d9731a"],["Other SAARC",S.tc["International – Other SAARC"],"#c99a2e"],["Non-SAARC",S.tc["International – Non-SAARC"],"#2856a3"]];
+  const tw=(W-120-3*20)/4;
+  tiles.forEach((t,i)=>{ const x=60+i*(tw+20); rr(x,590,tw,180,22,"#ffffff"); g.fillStyle=t[2]; g.fillRect(x,590+22,8,136); T(t[0],x+30,645,28,"#5f7176"); T(String(t[1]),x+30,735,72,t[2],"700"); });
+  let y = 820;
+  // MTD band
+  rr(60,y,W-120,150,22,"#fbf3e0");
+  T(`${S.month} to date`,100,y+52,28,"#6d4b00","700");
+  T(String(S.mtd),100,y+122,64,"#6d4b00","700");
+  g.font=`700 64px ${F}`; const mw=g.measureText(String(S.mtd)).width;
+  T(S.target?`/ ${S.target} target · ${pct(S.mtd,S.target)}%`:"cases",100+mw+16,y+118,30,"#6d4b00");
+  T(`Avg ${f1(S.mtdAvg)} / day`,W-100,y+52,28,"#6d4b00","400","right");
+  T(`Intl ${S.mtdIntl} (BD ${S.mtdBD})`,W-100,y+90,28,"#6d4b00","400","right");
+  T(`FY to date ${S.fy}`,W-100,y+128,28,"#6d4b00","700","right");
+  y += 150;
+  if(S.target){ y += 16; rr(60,y,W-120,14,7,"#eadcb8"); rr(60,y,Math.max(14,(W-120)*Math.min(1,S.mtd/S.target)),14,7,"#c99a2e"); y += 14; }
+  T(`Total scans completed ${S.milestone.toLocaleString("en-IN")}   ·   Booked for tomorrow ${S.tomorrow}`,W/2,y+50,28,"#004f56","700","center");
+  y += 90;
+  const list = (title, items, n)=>{
+    rr(60,y,W-120,100+n*54+(items.length>n?30:0),22,"#ffffff");
+    T(title,100,y+54,30,"#004f56","700"); y+=118;
+    items.slice(0,n).forEach(([k,v],i)=>{ if(i) { g.fillStyle="#dbe5e7"; g.fillRect(100,y+i*54-38,W-200,2); }
+      T(fit(k,W-320,30,"400"),100,y+i*54,30,"#1d2b2f"); T(String(v),W-100,y+i*54,32,"#00727c","700","right"); });
+    if(items.length>n) T(`+ ${items.length-n} more`,100,y+n*54-10,24,"#5f7176");
+    y += n*54 + (items.length>n?30:0) + 10;
+  };
+  if(rows) list("Unit-wise cases", S.units, rows);
+  if(drows) list("Referring doctors", S.docs, drows);
+  y += 30;
+  T(`Generated ${new Date().toLocaleString("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})} · PET-CT Team Desk`,W/2,y+20,24,"#7b8d92","400","center");
+  const out = document.createElement("canvas"); out.width=W; out.height=Math.min(H, y+60);
+  out.getContext("2d").drawImage(cv,0,0);
+  return out;
+}
+$("snapBtn").onclick = async ()=>{
+  const d = $("dayPick").value || today();
+  const S = daySummary(d);
+  const cv = await drawSnapshot(S);
+  const url = cv.toDataURL("image/png");
+  const blob = await new Promise(r=>cv.toBlob(r,"image/png"));
+  $("sheet").innerHTML = `<div class="hd"><h3 style="margin:0">WhatsApp snapshot · ${fmtD(d)}</h3><button class="ghost sm" id="mClose">Close</button></div>
+    <img src="${url}" alt="Daily snapshot" style="width:100%;border-radius:12px;border:1px solid var(--line)">
+    <p class="note">On a phone, press and hold the image to save or share it to WhatsApp.</p>
+    <div class="row"><button id="snapSave" ${downloads?"":"class='hidden'"}>Download PNG</button><button class="sec" id="snapText">Copy summary text</button></div>`;
+  $("modal").classList.add("on");
+  $("mClose").onclick = closeModal;
+  if(downloads) $("snapSave").onclick = async ()=>{ try{ await downloads.save({filename:`PET-CT_Daily_${fmtD(d)}.png`, data:blob}); }catch(e){ if(!(e&&e.code==="declined")) toast("Couldn't download – press and hold the image instead"); } };
+  $("snapText").onclick = ()=>copyText(summaryText(S));
+};
+$("sumBtn").onclick = ()=>copyText(summaryText(daySummary($("dayPick").value||today())));
+async function copyText(t){ try{ await navigator.clipboard.writeText(t); toast("Copied – paste into WhatsApp"); }catch(e){ toast("Couldn't copy on this device"); } }
+
+
+/* ---------- pull from shared appointment sheet (Microsoft 365) ---------- */
+const MS = "Microsoft 365";
+let sheetIndex = null; // [{n, name}]
+let sheetRows = [];
+function mcpText(res){ if(!res) return ""; if(typeof res.payload==="string") return res.payload; const b=(res.content||[]).find(x=>x.type==="text"); return b ? b.text : (res.payload ? JSON.stringify(res.payload) : ""); }
+function mcpErrMsg(e){
+  const c = e && e.code;
+  if(c==="server_not_connected") return "Microsoft 365 isn't connected. Add it in claude.ai Settings → Connectors, then try again.";
+  if(c==="needs_reauth") return "Microsoft 365 needs to be reconnected. Reconnect it in claude.ai Settings → Connectors.";
+  if(c==="not_in_manifest" || c==="approval_required" || c==="consent_required") return "The app needs your permission to read the sheet. Tap the button again and choose Allow.";
+  if(c==="blocked_by_policy") return "Your organisation's policy blocks reading this file from the app.";
+  if(c==="selection_required") return "Choose which Microsoft 365 connection to use when claude.ai asks, then try again.";
+  if(c==="tool_error") return "The sheet couldn't be opened – check the file location in Settings and that it's still shared with you.";
+  if(c==="server_unavailable") return "Microsoft 365 didn't respond. Try again in a moment.";
+  return "Couldn't read the appointment sheet. Try again.";
+}
+async function readSheetPage(n){
+  const input = { uri: settings.sheetUri || DEFAULT_SETTINGS.sheetUri };
+  if(n){ input.startPage = n; input.endPage = n; }
+  const r = await mcp.callTool(MS, "read_resource", input, {cache:false});
+  return mcpText(r);
+}
+function parseSheetList(txt){
+  const out = []; const re = /^(\d+)\.\s+(.+)$/gm; let m;
+  const head = txt.split("## Sheet:")[0];
+  while((m = re.exec(head))) out.push({n:Number(m[1]), name:m[2].trim()});
+  return out;
+}
+function findSheetFor(dateStr){
+  const d = parseYmd(dateStr), mon = MON[d.getMonth()].toLowerCase(), yr = String(d.getFullYear());
+  return (sheetIndex||[]).find(s=>{ const nm = s.name.toLowerCase(); return nm.startsWith(mon) && (nm.includes(yr) || nm.includes(yr.slice(2))); });
+}
+function parseSheetDate(v, fallbackYear){
+  v = String(v||"").trim(); if(!v) return null; let m;
+  if((m = v.match(/^(\d{1,2})[-\s]([A-Za-z]{3})[A-Za-z]*[-\s](\d{2,4})$/))){ const mi = MON.findIndex(x=>x.toLowerCase()===m[2].toLowerCase()); if(mi<0) return null; let y = Number(m[3]); if(y<100) y+=2000; return ymd(new Date(y,mi,Number(m[1]))); }
+  if((m = v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/))){ let y = Number(m[3]); if(y<100) y+=2000; return ymd(new Date(y,Number(m[1])-1,Number(m[2]))); }
+  if((m = v.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/))) return ymd(new Date(Number(m[3]),Number(m[2])-1,Number(m[1])));
+  if((m = v.match(/^(\d{4})-(\d{2})-(\d{2})/))) return m[0].slice(0,10);
+  return null;
+}
+function parseSheetTime(v){
+  const m = String(v||"").trim().match(/^(\d{1,2})[:.](\d{2})\s*([ap])\.?m?\.?/i); if(!m) return "";
+  let h = Number(m[1]) % 12; if(m[3].toLowerCase()==="p") h += 12; return pad(h)+":"+m[2];
+}
+function cleanName(n){ return properName(String(n||"").replace(/\(.*?\)/g," ")); }
+function cleanDoc(d){ return properDoctor(d); }
+function parseSheetRows(txt){
+  const rows = [];
+  const parts = txt.split(/^## Sheet: /m).slice(1);
+  for(const part of parts){
+    const lines = part.split("\n");
+    const hi = lines.findIndex(l=>/patient name/i.test(l) && /uhid/i.test(l));
+    if(hi<0) continue;
+    const H = lines[hi].split("\t").map(x=>x.trim().toLowerCase());
+    const col = re => H.findIndex(h=>re.test(h));
+    const C = { date:col(/^date$/), time:col(/^time$/), name:col(/patient name/), age:col(/^age/), sex:col(/^sex$/), opip:col(/op\s*\/\s*ip/), diag:col(/diag/), uhid:col(/uhid/), dr:col(/dr name|doctor|referr/), phone:col(/phone|contact/), urea:col(/urea/), creat:col(/creat/), remarks:col(/remark/) };
+    let curDate = null, curTime = "";
+    for(const line of lines.slice(hi+1)){
+      if(/^\[.*\]$/.test(line.trim()) || line.startsWith("Formulas")) continue;
+      const c = line.split("\t"); const g = k => C[k]>=0 ? String(c[C[k]]||"").trim() : "";
+      const dv = g("date");
+      if(dv){ const pd = parseSheetDate(dv); if(pd){ curDate = pd; curTime = ""; } }
+      const tv = g("time"); if(tv && parseSheetTime(tv)) curTime = parseSheetTime(tv);
+      const name = g("name"); if(!name || !curDate) continue;
+      if(/^[A-Z0-9]{2,5}\.\d{5,}$/i.test(name)) continue; // stray UHID in name column
+      let age = g("age"), sex = g("sex");
+      const as = age.match(/^(\d{1,3})\s*[Y]?\s*\/\s*([MF])/i); if(as){ age = as[1]; sex = as[2]; }
+      const uhidRaw = g("uhid").replace(/\s+/g,"").toUpperCase();
+      const phoneRaw = g("phone");
+      rows.push({
+        date: curDate, time: curTime, rawName: name, name: cleanName(name),
+        age: /^\d{1,3}/.test(age) ? parseInt(age,10) : null,
+        gender: /^m/i.test(sex) ? "Male" : /^f/i.test(sex) ? "Female" : "",
+        opip: g("opip").toUpperCase(), diagnosis: g("diag").replace(/\s+/g," ").trim(),
+        uhid: /^[A-Z0-9]{2,5}\.\d{5,}$/.test(uhidRaw) ? uhidRaw : "",
+        referredBy: cleanDoc(g("dr")), phoneRaw,
+        phone: (phoneRaw.match(/(?:\+?\d[\d\s-]{8,}\d)/)||[""])[0].replace(/[\s-]/g,""),
+        ward: /ward|hdu|icu|mdccu|extension/i.test(phoneRaw) ? phoneRaw : "",
+        urea: g("urea"), creat: g("creat"), remarks: g("remarks")
+      });
+    }
+  }
+  return rows;
+}
+const normName = n => String(n||"").toLowerCase().replace(/\(.*?\)/g,"").replace(/\b(mr|mrs|ms|miss|master|baby|dr)\b\.?/g,"").replace(/[^a-z]/g,"");
+function matchRow(r){
+  const same = cases.filter(c=>c.date===r.date && isActive(c));
+  const hit = same.find(c=>(r.uhid && c.uhid===r.uhid) || (normName(c.name) && normName(c.name)===normName(r.name)));
+  const prev = r.uhid ? cases.filter(c=>c.uhid===r.uhid && c.date<r.date && isActive(c)).sort((a,b)=>b.date.localeCompare(a.date))[0] : null;
+  if(hit) return {kind: (!hit.uhid && r.uhid) ? "uhid" : "exists", hit, prev};
+  return {kind:"new", prev};
+}
+function guessUnit(r){
+  const t = (r.phoneRaw + " " + r.remarks).toLowerCase();
+  if(/main apollo|main extension/.test(t)){ const u = settings.units.find(x=>/greams|main hospital/i.test(x)); if(u) return u; }
+  return "";
+}
+async function openSheetPull(){
+  const d = $("dayPick").value || today();
+  $("sheet").innerHTML = `<div class="hd"><h3 style="margin:0">Appointment sheet</h3><button class="ghost sm" id="mClose">Close</button></div>
+    <div class="card">
+      <div class="note" style="margin-bottom:10px">Reads <b>PET CT APPOINTMENT 2026</b> shared by Nuclear Medicine Vanagaram, using your Microsoft 365 connection.</div>
+      <div class="row" style="flex-wrap:nowrap"><input type="date" id="spDate" value="${d}" class="grow"><button id="spGo">Pull</button></div>
+      <div class="chips" style="margin-top:10px"><span class="chip" data-o="-1">Yesterday</span><span class="chip" data-o="0">Today</span><span class="chip" data-o="1">Tomorrow</span><span class="chip" data-o="2">Day after</span></div>
+    </div>
+    <div id="spOut"></div>`;
+  $("modal").classList.add("on");
+  $("mClose").onclick = closeModal;
+  $("sheet").querySelectorAll(".chip[data-o]").forEach(ch=>ch.onclick=()=>{ $("spDate").value = addDays(today(), Number(ch.dataset.o)); pullSheet(); });
+  $("spGo").onclick = pullSheet;
+  if(!mcp){ $("spOut").innerHTML = `<div class="warn">Reading the sheet needs the app open on claude.ai with Microsoft 365 connected. Only the account that the sheet is shared with can pull from it.</div>`; $("spGo").disabled = true; return; }
+  pullSheet();
+}
+async function pullSheet(){
+  const d = $("spDate").value || today(); const out = $("spOut"); const go = $("spGo");
+  go.disabled = true;
+  out.innerHTML = `<div class="card"><div class="ai" style="margin:0"><div class="spin"></div>Opening the appointment sheet…</div></div>`;
+  try{
+    if(!sheetIndex){ const t = await readSheetPage(1); sheetIndex = parseSheetList(t); }
+    const sh = findSheetFor(d);
+    if(!sh){ out.innerHTML = `<div class="warn">No tab for ${MON[parseYmd(d).getMonth()]} ${parseYmd(d).getFullYear()} in the sheet yet.</div>`; return; }
+    out.innerHTML = `<div class="card"><div class="ai" style="margin:0"><div class="spin"></div>Reading the "${esc(sh.name)}" tab…</div></div>`;
+    const txt = await readSheetPage(sh.n);
+    sheetRows = parseSheetRows(txt).filter(r=>r.date===d);
+    renderSheetRows(d, sh.name);
+  }catch(err){ console.error(err); out.innerHTML = `<div class="err">${esc(mcpErrMsg(err))}</div>`; }
+  finally{ go.disabled = false; }
+}
+function renderSheetRows(d, tab){
+  const out = $("spOut");
+  if(!sheetRows.length){ out.innerHTML = `<div class="card"><div class="empty">No patients listed for ${fmtD(d)} in the "${esc(tab)}" tab.</div></div>`; return; }
+  const ms = sheetRows.map(matchRow);
+  const nNew = ms.filter(m=>m.kind==="new").length, nU = ms.filter(m=>m.kind==="uhid").length, nE = ms.filter(m=>m.kind==="exists").length;
+  const cOpts = (sel)=>["India","Bangladesh",...SAARC_OTHER,"Other"].map(x=>`<option ${x===sel?"selected":""}>${x}</option>`).join("");
+  out.innerHTML = `<div class="card">
+    <div class="row" style="justify-content:space-between;margin-bottom:4px"><h3 style="margin:0">${fmtD(d)} · ${sheetRows.length} patient${sheetRows.length===1?"":"s"}</h3><button class="sec sm" id="spCopy">Copy UHIDs</button></div>
+    <div class="note" style="margin-bottom:8px">${nNew} new · ${nU} UHID to add · ${nE} already in the app. Set the country for international patients before importing.</div>
+    ${sheetRows.map((r,i)=>{ const m = ms[i]; return `
+      <div class="case" style="cursor:default;align-items:flex-start">
+        ${m.kind!=="exists"?`<input type="checkbox" class="spChk" data-i="${i}" checked style="width:22px;height:22px;margin-top:10px;flex:none">`:`<span style="width:22px;flex:none"></span>`}
+        <div class="grow" style="min-width:0">
+          <div class="nm">${esc(r.name)} <span class="note" style="font-weight:500">${r.age??""}${r.gender?r.gender[0]:""}${r.opip?" · "+esc(r.opip):""}</span></div>
+          <div class="mt"><b style="color:var(--ink)">${r.uhid?esc(r.uhid):"No UHID"}</b>${r.time?" · "+fmtTime(r.time):""} · ${esc(r.referredBy||"—")}</div>
+          <div class="mt">${esc(r.diagnosis||"")}</div>
+          <div class="bd">${m.kind==="new"?`<span class="badge b-Scheduled">New</span>`:m.kind==="uhid"?`<span class="badge b-Prep">Add UHID to ${esc(m.hit.name)}</span>`:`<span class="badge b-ScanDone">Already in app</span>`}${m.prev?`<span class="badge" style="background:#eef2f3;color:#40555a">Repeat · last ${fmtD(m.prev.date)}</span>`:""}${(r.urea||r.creat)?`<span class="badge b-ScanDone">Renal report</span>`:""}</div>
+          ${m.kind==="new"?`<div style="margin-top:8px;max-width:220px"><select class="spCty" data-i="${i}" style="padding:8px 30px 8px 10px;font-size:14px">${cOpts("India")}</select></div>`:""}
+        </div>
+      </div>`; }).join("")}
+    <div class="row" style="margin-top:12px"><button class="grow" id="spImport" ${canWrite?"":"disabled"}>Import selected</button></div>
+  </div>`;
+  $("spCopy").onclick = ()=>copyText(sheetRows.filter(r=>r.uhid).map(r=>r.uhid).join("\n"));
+  $("spImport").onclick = ()=>importSheetRows(ms);
+}
+async function importSheetRows(ms){
+  if(!db){ toast("Not connected"); return; }
+  const picks = [...document.querySelectorAll(".spChk")].filter(c=>c.checked).map(c=>Number(c.dataset.i));
+  if(!picks.length){ toast("Nothing selected"); return; }
+  const btn = $("spImport"); btn.disabled = true; btn.textContent = "Importing…";
+  const uid = user ? await user.id() : null; let added = 0, upd = 0;
+  try{
+    for(const i of picks){
+      const r = sheetRows[i], m = ms[i], now = new Date().toISOString();
+      if(m.kind==="uhid"){
+        const before = plain(m.hit);
+        await db.doc("cases/"+m.hit.id).update({uhid:r.uhid, updatedAt:now});
+        await logChange("edit", m.hit.id, before, {...before, uhid:r.uhid, updatedAt:now}); upd++; continue;
+      }
+      const ctySel = document.querySelector(`.spCty[data-i="${i}"]`);
+      const country = ctySel ? ctySel.value : "India";
+      const type = classify(country), amt = tariffFor(type);
+      const notesArr = ["Imported from PET CT APPOINTMENT 2026"]; if(r.opip) notesArr.push(r.opip); if(r.ward) notesArr.push("Ward: "+r.ward); if(r.urea||r.creat) notesArr.push(`Urea ${r.urea||"–"} / Creatinine ${r.creat||"–"}`); if(r.remarks) notesArr.push("Remarks: "+r.remarks);
+      const o = { name:r.name, age:r.age, gender:r.gender, uhid:r.uhid, phone:r.phone, country, patientType:type,
+        referredBy:r.referredBy, unit:guessUnit(r), referredTo:settings.referredTo, date:r.date, time:r.time,
+        scanType:settings.scanTypes[0], status:"Scheduled", diagnosis:r.diagnosis,
+        visitType: m.prev ? VISIT_TYPES[1] : VISIT_TYPES[0], billing: country==="India" ? "" : "International package",
+        amount:amt, discount:0, net:amt, notes:notesArr.join(" · "), opip:r.opip,
+        prep:{renal: !!(r.urea||r.creat)}, source:"sheet", createdAt:now, updatedAt:now, createdBy:uid, history:[{s:"Scheduled", at:now, by:uid}] };
+      const ref = await db.collection("cases").add(o);
+      await logChange("add", ref && ref.id, null, o); added++;
+    }
+    toast(`${added} added${upd?`, ${upd} UHID${upd>1?"s":""} updated`:""}`);
+    closeModal(); $("dayPick").value = sheetRows[0] ? sheetRows[0].date : $("dayPick").value; renderToday();
+  }catch(err){ handleWriteErr(err); btn.disabled=false; btn.textContent="Import selected"; }
+}
+$("sheetBtn").onclick = openSheetPull;
+
+
+/* ---------- printing (PDF → open on the computer → Ctrl/Cmd+P) ---------- */
+let pdfLibReady = null;
+function ensurePdfLib(){
+  if(!pdfLibReady) pdfLibReady = (async()=>{
+    await loadScript("https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js");
+    await loadScript("https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js");
+  })().catch(e=>{ pdfLibReady=null; throw e; });
+  return pdfLibReady;
+}
+const rs = x => { const n = Number(x)||0; const t = "Rs. " + Math.abs(n).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2}); return n<0 ? "("+t+")" : t; };
+const TEAL=[0,114,124], GOLD=[201,154,46], INK=[16,28,31], MUTED=[107,122,126];
+function pdfHeader(doc, title, sub){
+  const W = doc.internal.pageSize.getWidth();
+  doc.setFillColor(...TEAL); doc.rect(0,0,W,22,"F"); doc.setFillColor(...GOLD); doc.rect(0,22,W,1.2,"F");
+  doc.setTextColor(255,255,255); doc.setFont("helvetica","bold"); doc.setFontSize(14); doc.text("Apollo Cancer Centres, Vanagaram", 12, 10);
+  doc.setFont("helvetica","normal"); doc.setFontSize(9.5); doc.text("Department of Nuclear Medicine · PET-CT", 12, 16);
+  doc.setFont("helvetica","bold"); doc.setFontSize(12); doc.text(title, W-12, 10, {align:"right"});
+  doc.setFont("helvetica","normal"); doc.setFontSize(9.5); doc.text(sub||"", W-12, 16, {align:"right"});
+  doc.setTextColor(...INK);
+}
+function pdfFooter(doc){
+  const n = doc.getNumberOfPages(), W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+  const stamp = new Date().toLocaleString("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+  for(let i=1;i<=n;i++){ doc.setPage(i); doc.setFontSize(8); doc.setTextColor(...MUTED); doc.text(`Printed ${stamp} · PET-CT Desk`, 12, H-7); doc.text(`Page ${i} of ${n}`, W-12, H-7, {align:"right"}); }
+}
+const tblStyle = { styles:{font:"helvetica",fontSize:8.5,cellPadding:1.8,textColor:INK,lineColor:[219,229,231],lineWidth:0.1}, headStyles:{fillColor:[227,241,242],textColor:[0,83,90],fontStyle:"bold"}, alternateRowStyles:{fillColor:[248,250,250]}, margin:{left:12,right:12} };
+async function savePdf(doc, filename){
+  const blob = doc.output("blob");
+  if(downloads){
+    try{ await downloads.save({filename, data:blob}); toast("PDF saved – open it and press Ctrl+P (Cmd+P on Mac) to print"); return; }
+    catch(e){ if(e && (e.code==="declined" || e.code==="cancelled")) return; console.error(e); }
+  }
+  // fallback: show inside the app
+  const url = URL.createObjectURL(blob);
+  $("sheet").innerHTML = `<div class="hd"><h3 style="margin:0">Print preview</h3><button class="ghost sm" id="mClose">Close</button></div>
+    <div class="warn">Saving files isn't available in this view. Open the app in the Claude desktop app or a browser to save and print this PDF.</div>
+    <iframe src="${url}" style="width:100%;height:70vh;border:0;border-radius:14px;background:#fff"></iframe>`;
+  $("modal").classList.add("on"); $("mClose").onclick = closeModal;
+}
+async function withPdf(fn){
+  toast("Preparing PDF…");
+  try{ await ensurePdfLib(); const { jsPDF } = window.jspdf; await fn(jsPDF); }
+  catch(e){ console.error(e); toast("Couldn't prepare the PDF – check your connection and try again"); }
+}
+function printDayList(){
+  const d = $("dayPick").value || today();
+  return withPdf(async jsPDF=>{
+    const doc = new jsPDF({orientation:"landscape", unit:"mm", format:"a4"});
+    const all = cases.filter(c=>c.date===d).sort((a,b)=>(a.time||"99").localeCompare(b.time||"99"));
+    const act = all.filter(isActive); const tc = typeCounts(act);
+    pdfHeader(doc, "PET-CT Appointment List", `${fmtD(d)} · ${["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][parseYmd(d).getDay()]}`);
+    doc.setFontSize(9.5); doc.setTextColor(...INK);
+    const summ = `Total ${act.length}   ·   Domestic ${tc["Domestic"]}   ·   Bangladesh ${tc["International – Bangladesh"]}   ·   Other SAARC ${tc["International – Other SAARC"]}   ·   Non-SAARC ${tc["International – Non-SAARC"]}   ·   Cancelled / no-show ${all.length-act.length}   ·   Referred to ${settings.referredTo}`;
+    doc.text(summ, 12, 30);
+    let G=0,D=0;
+    const body = all.map((c,i)=>{ const net = typeof c.net==="number"?c.net:(typeof c.amount==="number"?c.amount-(Number(c.discount)||0):null); if(isActive(c)&&typeof c.amount==="number"){G+=c.amount;D+=Number(c.discount)||0;}
+      return [i+1, c.time?fmtTime(c.time):"", c.name||"", `${c.age??""}${c.gender?"/"+c.gender[0]:""}`, c.uhid||"", TYPE_SHORT[c.patientType||classify(c.country)], c.referredBy||"", c.unit||"", c.scanType||"", `${prepDone(c)}/${PREP.length}`, c.status||"", net==null?"":rs(net)]; });
+    doc.autoTable({ ...tblStyle, startY:34,
+      head:[["#","Time","Patient","Age/Sex","UHID","Type","Referred by","Unit","Scan","Prep","Status","Balance"]],
+      body: body.length ? body : [["","","No appointments","","","","","","","","",""]],
+      foot: body.length ? [["","","","","","","","","","","Total", rs(G-D)]] : undefined,
+      footStyles:{fillColor:[227,241,242],textColor:[0,83,90],fontStyle:"bold",halign:"right"},
+      columnStyles:{0:{cellWidth:7},1:{cellWidth:17},2:{cellWidth:46},3:{cellWidth:14},4:{cellWidth:30},5:{cellWidth:20},6:{cellWidth:34},8:{cellWidth:30},9:{cellWidth:11,halign:"center"},10:{cellWidth:22},11:{cellWidth:26,halign:"right"}} });
+    let y = doc.lastAutoTable.finalY + 6;
+    if(D){ doc.setFontSize(9); doc.text(`Gross ${rs(G)}   ·   Discount ${rs(-D)}   ·   Balance ${rs(G-D)}`, 12, y); y += 6; }
+    const H = doc.internal.pageSize.getHeight(); if(y > H-28){ doc.addPage(); y = 20; }
+    doc.setFontSize(9); doc.setTextColor(...MUTED);
+    ["Prepared by","PET-CT In-charge","Nuclear Medicine Physician"].forEach((t,i)=>{ const x = 12 + i*92; doc.line(x, y+14, x+70, y+14); doc.text(t, x, y+19); });
+    pdfFooter(doc);
+    await savePdf(doc, `PET-CT_Appointments_${fmtD(d)}.pdf`);
+  });
+}
+function printCaseSlip(c){
+  if(!c) return;
+  return withPdf(async jsPDF=>{
+    const doc = new jsPDF({unit:"mm", format:"a4"});
+    pdfHeader(doc, "PET-CT Case Slip", fmtD(c.date) + (c.time?" · "+fmtTime(c.time):""));
+    const t = c.patientType||classify(c.country);
+    const amt = typeof c.amount==="number"?c.amount:null, disc = Number(c.discount)||0;
+    const sect = (title, rows, y)=>{ doc.autoTable({ ...tblStyle, startY:y, head:[[{content:title,colSpan:2}]], body:rows, theme:"grid", columnStyles:{0:{cellWidth:52,fontStyle:"bold",textColor:[59,74,78]},1:{}}, styles:{...tblStyle.styles,fontSize:9.5,cellPadding:1.5} }); return doc.lastAutoTable.finalY + 3; };
+    let y = 30;
+    y = sect("Patient", [["Name",c.name||""],["Age / Sex",`${c.age??""}${c.gender?" / "+c.gender:""}`],["UHID",c.uhid||""],["Phone",c.phone||""],["Country",c.country||"India"],["Patient type",t]], y);
+    y = sect("Referral", [["Referred by",c.referredBy||""],["Referring unit",c.unit||""],["Referred to",c.referredTo||settings.referredTo]], y);
+    y = sect("Appointment", [["Date",fmtD(c.date)],["Time",c.time?fmtTime(c.time):""],["Scan type",c.scanType||""],["Scan purpose",c.visitType||""],["Diagnosis / indication",c.diagnosis||""],["Status",c.status||""]], y);
+    y = sect("Billing", [["Billing category",c.billing||""],["Amount",amt==null?"":rs(amt)],["Discount",disc?rs(-disc):"–"],["Balance payable",amt==null?"":rs(amt-disc)]], y);
+    y = sect("Patient preparation", PREP.map(([k,l])=>[l, c.prep&&c.prep[k] ? "Done" : "Pending"]), y);
+    if(c.notes) y = sect("Notes", [["Notes", c.notes]], y);
+    y += 2;
+    const H = doc.internal.pageSize.getHeight(); if(y > H-30){ doc.addPage(); y = 20; }
+    doc.setFontSize(9); doc.setTextColor(...MUTED);
+    ["Patient / Attender","PET-CT Desk"].forEach((s,i)=>{ const x = 12 + i*100; doc.line(x, y+16, x+75, y+16); doc.text(s, x, y+21); });
+    pdfFooter(doc);
+    await savePdf(doc, `PET-CT_Slip_${(c.name||"case").replace(/[^A-Za-z0-9]+/g,"_")}_${fmtD(c.date)}.pdf`);
+  });
+}
+function printDashboard(){
+  return withPdf(async jsPDF=>{
+    if(window.Chart) Object.values(charts).forEach(ch=>{ try{ ch.stop(); ch.update("none"); }catch(e){} });
+    const [from,to] = rangeDates();
+    const doc = new jsPDF({unit:"mm", format:"a4"});
+    pdfHeader(doc, "PET-CT Performance Report", `${fmtD(from)} to ${fmtD(to)}`);
+    const W = doc.internal.pageSize.getWidth();
+    // KPI tiles from the dashboard
+    const k = [...document.querySelectorAll("#dashKpis .kpi")].map(e=>[e.querySelector(".l")?.textContent||"", e.querySelector(".v")?.textContent||"", e.querySelector(".x")?.textContent||""]);
+    let x = 12, y = 30; const bw = (W-24-10)/3;
+    k.forEach((t,i)=>{ if(i && i%3===0){ x=12; y+=24; } doc.setFillColor(243,245,246); doc.roundedRect(x,y,bw,20,2,2,"F"); doc.setFontSize(7.5); doc.setTextColor(...MUTED); doc.text(t[0].toUpperCase(), x+4, y+5.5); doc.setFontSize(15); doc.setTextColor(...INK); doc.setFont("helvetica","bold"); doc.text(t[1].replace("₹","Rs."), x+4, y+13); doc.setFont("helvetica","normal"); doc.setFontSize(7.5); doc.setTextColor(...MUTED); doc.text(doc.splitTextToSize(t[2],bw-8)[0]||"", x+4, y+17.5); x += bw+5; });
+    y += 28;
+    // charts as images
+    const addChart = (id, title)=>{ const cv = $(id); if(!cv || !charts[id]) return; const img = cv.toDataURL("image/png",1.0); const ratio = cv.height/cv.width; const w = (W-24-6)/2, h = Math.min(70, w*ratio);
+      return {img,w,h,title}; };
+    const pairs = [["chDaily","Daily cases & cumulative"],["chUnit","Cases by referring unit"],["chType","Domestic vs international"],["chStatus","Status"]];
+    for(let i=0;i<pairs.length;i+=2){
+      const a = addChart(...pairs[i]), b = addChart(...pairs[i+1]); if(!a && !b) continue;
+      const h = Math.max(a?a.h:0, b?b.h:0);
+      if(y + h + 10 > doc.internal.pageSize.getHeight()-14){ doc.addPage(); y = 16; }
+      [a,b].forEach((c,j)=>{ if(!c) return; const cx = 12 + j*(c.w+6); doc.setFontSize(9); doc.setTextColor(...TEAL); doc.setFont("helvetica","bold"); doc.text(c.title, cx, y); doc.setFont("helvetica","normal"); doc.addImage(c.img,"PNG",cx,y+2,c.w,c.h); });
+      y += h + 10;
+    }
+    const tableFrom = (sel, title)=>{ const t = document.querySelector(sel+" table"); if(!t) return;
+      const head = [...t.querySelectorAll("thead th")].map(th=>th.textContent);
+      const body = [...t.querySelectorAll("tbody tr")].map(tr=>[...tr.children].map(td=>td.textContent.replace(/₹/g,"Rs.").trim()));
+      if(y > doc.internal.pageSize.getHeight()-40){ doc.addPage(); y = 16; }
+      doc.setFontSize(10.5); doc.setTextColor(...TEAL); doc.setFont("helvetica","bold"); doc.text(title, 12, y); doc.setFont("helvetica","normal");
+      doc.autoTable({ ...tblStyle, startY:y+2, head: head.length?[head]:undefined, body });
+      y = doc.lastAutoTable.finalY + 8; };
+    tableFrom("#statsTbl","Standard statistics");
+    tableFrom("#unitTbl","Unit-wise summary");
+    tableFrom("#docTbl","Top referring doctors");
+    tableFrom("#countryTbl","International patients by country");
+    const rev = document.querySelectorAll("#revCard table"); if(rev.length){ const keep=y; rev.forEach((t,i)=>{ const head=[...t.querySelectorAll("thead th")].map(th=>th.textContent); const body=[...t.querySelectorAll("tbody tr")].map(tr=>[...tr.children].map(td=>td.textContent.replace(/₹/g,"Rs.").trim())); if(y > doc.internal.pageSize.getHeight()-40){ doc.addPage(); y=16; } doc.setFontSize(10.5); doc.setTextColor(...TEAL); doc.setFont("helvetica","bold"); doc.text(i?"Billing by category":"Billing by patient type",12,y); doc.setFont("helvetica","normal"); doc.autoTable({...tblStyle,startY:y+2,head:[head],body,columnStyles:{1:{halign:"right"},2:{halign:"right"},3:{halign:"right"},4:{halign:"right"}}}); y=doc.lastAutoTable.finalY+8; }); }
+    tableFrom("#tatTbl","Turnaround time");
+    tableFrom("#monthTbl","Month-wise trend");
+    pdfFooter(doc);
+    await savePdf(doc, `PET-CT_Report_${fmtD(from)}_to_${fmtD(to)}.pdf`);
+  });
+}
+$("printDayBtn").onclick = printDayList;
+$("printDashBtn").onclick = printDashboard;
+
+
+/* ---------- draggable + button ---------- */
+(function(){
+  const fab = $("fab"); if(!fab) return;
+  const KEY = "petct.fabPos";
+  const bounds = ()=>{ const hb = document.querySelector("header").getBoundingClientRect().bottom, tb = $("tabs").getBoundingClientRect().top; const w = fab.offsetWidth||58, h = fab.offsetHeight||58; return {minX:8, maxX:window.innerWidth-w-8, minY:hb+8, maxY:tb-h-8}; };
+  const clamp = (x,y)=>{ const b = bounds(); return [Math.min(Math.max(x,b.minX),Math.max(b.minX,b.maxX)), Math.min(Math.max(y,b.minY),Math.max(b.minY,b.maxY))]; };
+  const place = (x,y)=>{ [x,y] = clamp(x,y); fab.style.left = x+"px"; fab.style.top = y+"px"; fab.style.right = "auto"; fab.style.bottom = "auto"; return [x,y]; };
+  let pos = null;
+  try{ const v = JSON.parse(localStorage.getItem(KEY)||"null"); if(v && typeof v.fx==="number") pos = v; }catch(e){}
+  const applySaved = ()=>{ if(pos) place(pos.fx*window.innerWidth, pos.fy*window.innerHeight); };
+  requestAnimationFrame(applySaved);
+  window.addEventListener("resize", applySaved);
+  let start = null, dragging = false, suppress = false;
+  fab.addEventListener("pointerdown", e=>{
+    if(e.button!==undefined && e.button!==0) return;
+    const r = fab.getBoundingClientRect();
+    start = {px:e.clientX, py:e.clientY, x:r.left, y:r.top, id:e.pointerId}; dragging = false;
+    try{ fab.setPointerCapture(e.pointerId); }catch(_){}
+  });
+  fab.addEventListener("pointermove", e=>{
+    if(!start || e.pointerId!==start.id) return;
+    const dx = e.clientX-start.px, dy = e.clientY-start.py;
+    if(!dragging && Math.hypot(dx,dy) > 6){ dragging = true; fab.classList.add("dragging"); }
+    if(dragging){ e.preventDefault(); place(start.x+dx, start.y+dy); }
+  });
+  const end = e=>{
+    if(!start) return;
+    if(dragging){
+      const r = fab.getBoundingClientRect();
+      pos = {fx:r.left/window.innerWidth, fy:r.top/window.innerHeight};
+      try{ localStorage.setItem(KEY, JSON.stringify(pos)); }catch(_){}
+      suppress = true; setTimeout(()=>suppress=false, 350);
+    }
+    fab.classList.remove("dragging"); dragging = false; start = null;
+  };
+  fab.addEventListener("pointerup", end); fab.addEventListener("pointercancel", end);
+  fab.addEventListener("click", e=>{ if(suppress){ e.preventDefault(); e.stopPropagation(); } });
+  fab.addEventListener("contextmenu", e=>e.preventDefault());
+  const rb = $("fabReset");
+  if(rb) rb.onclick = ()=>{ pos = null; try{ localStorage.removeItem(KEY); }catch(_){} ["left","top","right","bottom"].forEach(k=>fab.style[k]=""); toast("+ button moved back to the corner"); };
+})();
+
+/* ---------- case modal ---------- */
+async function openCase(id){
+  const c = cases.find(x=>x.id===id); if(!c) return;
+  const ids = [...new Set([c.createdBy, ...(c.history||[]).map(h=>h.by)].filter(Boolean))];
+  await loadProfiles(ids);
+  const hist = (c.history||[]).slice().reverse().map(h=>`<div>${esc(h.s)} · ${new Date(h.at).toLocaleString("en-IN",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}${h.by?" · "+esc(pname(h.by)):""}</div>`).join("");
+  $("sheet").innerHTML = `
+    <div class="hd"><h3 style="margin:0">${esc(c.name)}</h3><button class="ghost sm" id="mClose">Close</button></div>
+    <div class="note">Update status</div>
+    <div class="statusbar">${STATUSES.map(s=>`<span class="chip ${c.status===s?"on":""}" data-s="${s}">${s}</span>`).join("")}</div>
+    <div class="card" style="background:var(--gold-l);border-color:#ecd8a6">
+      <div class="row"><h3 class="grow" style="margin:0">Patient prep · ${prepDone(c)}/${PREP.length}</h3></div>
+      <div id="prepList" style="margin-top:8px">${PREP.map(([k,l])=>`<label style="display:flex;gap:10px;align-items:center;color:var(--ink);font-size:15px;padding:5px 0"><input type="checkbox" data-k="${k}" ${c.prep&&c.prep[k]?"checked":""} ${canWrite?"":"disabled"} style="width:22px;height:22px">${l}</label>`).join("")}</div>
+      <div class="note" style="margin:8px 0 6px">Copy prep instructions for WhatsApp:</div>
+      <div class="row"><button type="button" class="sec sm pm" data-l="en">English</button><button type="button" class="sec sm pm" data-l="ta">தமிழ்</button><button type="button" class="sec sm pm" data-l="bn">বাংলা</button></div>
+    </div>
+    <form id="editForm">${formHtml(c,"e_")}
+      <div class="row" style="margin-top:12px">
+        <button type="submit" ${canWrite?"":"disabled"}>Save changes</button>
+        <button type="button" class="ghost" id="mDiscard">Discard changes</button>
+        <button type="button" class="sec" id="mPrint" style="display:flex;align-items:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>Print slip</button>
+        <span class="grow"></span>
+        <button type="button" class="danger" id="mDel" ${canWrite?"":"disabled"}>Delete</button>
+      </div>
+    </form>
+    <h3 style="margin-top:16px">History</h3>
+    <div class="hist">${hist||"<div>–</div>"}${c.createdBy?`<div>Added by ${esc(pname(c.createdBy))}${c.source==="ai"?" (read from document)":c.source==="whatsapp"?" (read from WhatsApp)":""}</div>`:""}</div>`;
+  bindTypeBadge("e_"); bindRepeat("e_", $("editForm"), id);
+  if(!canWrite){ const ph=$("editForm").elements.phone; if(ph){ ph.value = ph.value ? ph.value.slice(0,3)+"•••••"+ph.value.slice(-2) : ""; ph.disabled=true; } }
+  bindPrep(c);
+  $("modal").classList.add("on");
+  $("mClose").onclick = closeModal;
+  $("sheet").querySelectorAll(".statusbar .chip").forEach(ch=>ch.onclick=async()=>{ if(!canWrite||ch.dataset.s===c.status) return; await setStatus(id,ch.dataset.s); closeModal(); });
+  $("editForm").onsubmit = async e=>{
+    e.preventDefault();
+    const o = readForm(e.target); const now = new Date().toISOString(); const uid = user?await user.id():null;
+    const history = (Array.isArray(c.history)?c.history.slice(-30):[]);
+    if(o.status!==c.status) history.push({s:o.status, at:now, by:uid});
+    try{ const before = plain(c); await db.doc("cases/"+id).update({...o, updatedAt:now, history}); toast("Saved"); closeModal();
+      await logChange("edit", id, before, {...before, ...o, updatedAt:now, history}); }
+    catch(err){ handleWriteErr(err); }
+  };
+  $("mDiscard").onclick = ()=>{ closeModal(); toast("Unsaved edits discarded"); };
+  $("mPrint").onclick = ()=>printCaseSlip(cases.find(x=>x.id===id) || c);
+  $("mDel").onclick = async ()=>{
+    if(!(await confirmDlg(`Delete the case for ${c.name}? This cannot be undone.`,"Delete"))) return;
+    try{ const before = plain(c); await db.doc("cases/"+id).delete(); toast("Deleted – you can bring it back from Discard changes"); closeModal(); await logChange("delete", id, before, null); } catch(err){ handleWriteErr(err); }
+  };
+}
+function bindPrep(c){
+  $("prepList").querySelectorAll("input[type=checkbox]").forEach(cb=>cb.onchange=async()=>{
+    const prep = {...(c.prep||{})}; prep[cb.dataset.k] = cb.checked;
+    const all = PREP.every(([k])=>prep[k]);
+    const upd = {prep, updatedAt:new Date().toISOString()};
+    try{
+      const before = plain(c);
+      await db.doc("cases/"+c.id).update(upd); c.prep = prep;
+      logChange("prep", c.id, before, {...before, ...upd});
+      document.querySelector("#sheet h3.grow").textContent = `Patient prep · ${prepDone(c)}/${PREP.length}`;
+      if(all && c.status==="Scheduled"){ await setStatus(c.id,"Prep Informed"); }
+    }catch(err){ cb.checked=!cb.checked; handleWriteErr(err); }
+  });
+  $("sheet").querySelectorAll(".pm").forEach(b=>b.onclick=()=>copyText(prepMsg(c,b.dataset.l)));
+}
+function prepMsg(c, lang){
+  const h = settings.fastingHours||6, ph = settings.deskPhone||"PET-CT desk, Apollo Cancer Centres, Vanagaram";
+  const dt = fmtD(c.date), tm = c.time ? fmtTime(c.time) : "";
+  if(lang==="ta") return `வணக்கம் ${c.name},
+அப்போலோ கேன்சர் சென்டர்ஸ், வானகரத்தில் உங்கள் PET-CT ஸ்கேன் ${dt}${tm?" அன்று "+tm+" மணிக்கு":" அன்று"} திட்டமிடப்பட்டுள்ளது.
+
+தயவுசெய்து:
+• ஸ்கேனுக்கு முன் ${h} மணி நேரம் எதுவும் சாப்பிட வேண்டாம் (தண்ணீர் மட்டும் குடிக்கலாம்)
+• சமீபத்திய யூரியா / கிரியேட்டினின் பரிசோதனை அறிக்கையை கொண்டு வரவும்
+• சர்க்கரை நோய் இருந்தால் முன்கூட்டியே எங்களிடம் தெரிவிக்கவும்; மருத்துவர் ஆலோசனை இல்லாமல் அன்று காலை இன்சுலின் / மாத்திரை எடுக்க வேண்டாம்
+• முந்தைய ஸ்கேன் அறிக்கைகள் மற்றும் CD-களை கொண்டு வரவும்
+• ஒரு உதவியாளருடன் 30 நிமிடங்கள் முன்னதாக வரவும்
+
+சந்தேகங்களுக்கு: ${ph}`;
+  if(lang==="bn") return `প্রিয় ${c.name},
+অ্যাপোলো ক্যান্সার সেন্টার, ভানাগরম (চেন্নাই)-এ আপনার PET-CT স্ক্যান ${dt}${tm?" তারিখ "+tm+"-এ":" তারিখে"} নির্ধারিত হয়েছে।
+
+অনুগ্রহ করে:
+• স্ক্যানের আগে ${h} ঘণ্টা কিছু খাবেন না (শুধু পানি পান করতে পারেন)
+• সাম্প্রতিক ইউরিয়া / ক্রিয়েটিনিন রিপোর্ট সঙ্গে আনুন
+• ডায়াবেটিস থাকলে আগে থেকেই আমাদের জানান; ডাক্তারের পরামর্শ ছাড়া সেদিন সকালে ইনসুলিন / ওষুধ নেবেন না
+• আগের স্ক্যানের রিপোর্ট ও CD সঙ্গে আনুন
+• একজন সহকারীসহ ৩০ মিনিট আগে আসুন
+
+যেকোনো প্রশ্নে: ${ph}`;
+  return `Dear ${c.name},
+Your PET-CT scan at Apollo Cancer Centres, Vanagaram is scheduled on ${dt}${tm?" at "+tm:""}.
+
+Please:
+• Do not eat anything for ${h} hours before the scan (plain water is allowed)
+• Bring your latest urea / creatinine report
+• If you are diabetic, inform us in advance; do not take insulin / tablets that morning unless your doctor advises
+• Bring previous scan reports and CDs
+• Come 30 minutes early with one attender
+
+For queries: ${ph}`;
+}
+function closeModal(){ $("modal").classList.remove("on"); }
+$("modal").addEventListener("click", e=>{ if(e.target.id==="modal") closeModal(); });
+function confirmDlg(msg, okLabel){
+  return new Promise(res=>{
+    const wrap = document.createElement("div"); wrap.className="modal on"; wrap.style.zIndex=70;
+    wrap.innerHTML = `<div class="sheet" style="max-width:420px"><p style="margin:4px 0 16px">${esc(msg)}</p><div class="row"><span class="grow"></span><button class="ghost" data-a="0">Cancel</button><button class="${okLabel==="Delete"?"danger":""}" data-a="1">${esc(okLabel)}</button></div></div>`;
+    document.body.appendChild(wrap);
+    wrap.querySelectorAll("button").forEach(b=>b.onclick=()=>{ wrap.remove(); res(b.dataset.a==="1"); });
+  });
+}
+async function loadProfiles(ids){
+  const need = ids.filter(i=>!(i in profiles)); if(!need.length || !user || !user.profiles) return;
+  try{ const ps = await user.profiles(need); need.forEach(i=>profiles[i] = (ps && ps[i] && ps[i].name) || ""); }catch(e){}
+}
+const pname = id => profiles[id] || "a team member";
+
+/* ---------- cases list ---------- */
+function fillSelects(){
+  const keep = (id, opts, first) => { const el=$(id), v=el.value; el.innerHTML = `<option value="">${first}</option>` + opts.map(o=>`<option>${esc(o)}</option>`).join(""); el.value = v; };
+  keep("cType", TYPES, "All");
+  keep("cUnit", [...new Set(settings.units.concat(cases.map(c=>c.unit).filter(Boolean)))], "All units");
+  keep("cStatus", STATUSES, "All");
+}
+["q","cFrom","cTo","cType","cUnit","cStatus"].forEach(id=>$(id).addEventListener("input", renderCases));
+function filteredCases(){
+  const q = $("q").value.trim().toLowerCase(), fr=$("cFrom").value, to=$("cTo").value, ty=$("cType").value, un=$("cUnit").value, st=$("cStatus").value;
+  return cases.filter(c=>{
+    if(fr && c.date<fr) return false; if(to && c.date>to) return false;
+    if(ty && (c.patientType||classify(c.country))!==ty) return false;
+    if(un && c.unit!==un) return false; if(st && c.status!==st) return false;
+    if(q && ![c.name,c.uhid,c.referredBy,c.phone,c.unit,c.diagnosis].some(v=>String(v||"").toLowerCase().includes(q))) return false;
+    return true;
+  }).sort((a,b)=> (b.date+(b.time||"")).localeCompare(a.date+(a.time||"")));
+}
+function renderCases(){
+  fillSelects();
+  const list = filteredCases();
+  $("cCount").textContent = `${list.length} case${list.length===1?"":"s"}` + (list.length>200?" · showing latest 200":"");
+  $("caseList").innerHTML = !loaded ? `<div class="empty">Loading…</div>` : list.length ? list.slice(0,200).map(c=>caseRow(c,false)).join("") : `<div class="empty">No cases match.</div>`;
+  bindRows($("caseList"));
+}
+function toCsv(list){
+  const cols = [["date","Date"],["time","Time"],["name","Patient name"],["age","Age"],["gender","Gender"],["uhid","UHID"],["phone","Phone"],["country","Country"],["patientType","Patient type"],["referredBy","Referred by"],["unit","Referring unit"],["referredTo","Referred to"],["scanType","Scan type"],["status","Status"],["billing","Billing category"],["amount","Amount"],["discount","Discount"],["net","Balance"],["diagnosis","Diagnosis"],["notes","Notes"]];
+  const q = v => { const s = String(v??""); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; };
+  return [cols.map(c=>c[1]).join(",")].concat(list.map(c=>cols.map(([k])=> k==="date"?fmtD(c.date): k==="patientType"?(c.patientType||classify(c.country)) : (k==="amount"||k==="discount"||k==="net") ? (c[k]==null?"":Number(c[k]).toFixed(2)) : q(c[k])).join(","))).join("\n");
+}
+$("csvBtn").onclick = async ()=>{
+  const csv = toCsv(filteredCases().slice().reverse());
+  const name = "PET-CT_cases_" + today() + ".csv";
+  if(downloads){ try{ await downloads.save({filename:name, data:new Blob(["﻿"+csv],{type:"text/csv"})}); return; }catch(e){ if(e && e.code==="declined") return; } }
+  try{ await navigator.clipboard.writeText(csv); toast("CSV copied – paste into Excel"); }catch(e){ toast("Export not available here"); }
+};
+
+/* ---------- dashboard ---------- */
+const RANGES = [["today","Today"],["7d","Last 7 days"],["month","This month"],["lastmonth","Last month"],["fy","FY to date"],["all","All time"],["custom","Custom"]];
+function fyStart(d){ const m = settings.fyStartMonth||4; const y = (d.getMonth()+1)>=m ? d.getFullYear() : d.getFullYear()-1; return ymd(new Date(y,m-1,1)); }
+function rangeDates(){
+  const t = today(), d = new Date();
+  switch(range){
+    case "today": return [t,t];
+    case "7d": return [addDays(t,-6),t];
+    case "month": return [ymd(new Date(d.getFullYear(),d.getMonth(),1)), t];
+    case "lastmonth": return [ymd(new Date(d.getFullYear(),d.getMonth()-1,1)), ymd(new Date(d.getFullYear(),d.getMonth(),0))];
+    case "fy": return [fyStart(d), t];
+    case "all": { const ds = cases.map(c=>c.date).filter(Boolean).sort(); return [ds[0]||t, ds[ds.length-1] > t ? ds[ds.length-1] : t]; }
+    case "custom": return [$("rFrom").value||addDays(t,-29), $("rTo").value||t];
+  }
+}
+$("rangeChips").innerHTML = RANGES.map(([k,l])=>`<span class="chip" data-r="${k}">${l}</span>`).join("");
+$("rangeChips").querySelectorAll(".chip").forEach(ch=>ch.onclick=()=>{ range=ch.dataset.r; renderDash(); });
+$("rFrom").onchange = renderDash; $("rTo").onchange = renderDash;
+
+function stats(arr){
+  const a = arr.slice().sort((x,y)=>x-y), n=a.length; if(!n) return {n:0};
+  const mean = a.reduce((s,x)=>s+x,0)/n;
+  const sd = n>1 ? Math.sqrt(a.reduce((s,x)=>s+(x-mean)**2,0)/(n-1)) : 0;
+  const q = p => { const i=(n-1)*p, lo=Math.floor(i), hi=Math.ceil(i); return a[lo]+(a[hi]-a[lo])*(i-lo); };
+  return {n, mean, sd, min:a[0], max:a[n-1], median:q(.5), q1:q(.25), q3:q(.75), p90:q(.9), sum:a.reduce((s,x)=>s+x,0)};
+}
+function topUnit(o){ const e=Object.entries(o).sort((a,b)=>b[1]-a[1]); if(!e.length) return "–"; return e[0][0]+(e.length>1?" +"+(e.length-1)+" more":""); }
+function mkChart(id, cfg){ if(!window.Chart) return; Chart.defaults.animation = false; if(charts[id]) charts[id].destroy(); charts[id] = new Chart($(id), cfg); }
+function renderDash(){
+  document.querySelectorAll("#rangeChips .chip").forEach(c=>c.classList.toggle("on", c.dataset.r===range));
+  $("customRange").classList.toggle("hidden", range!=="custom");
+  const [from,to] = rangeDates();
+  const inR = cases.filter(c=>c.date>=from && c.date<=to);
+  const act = inR.filter(isActive), dropped = inR.length-act.length;
+  const done = act.filter(c=>DONE.includes(c.status)).length;
+  const t = today(), lastDay = to>t ? t : to;
+  // daily series
+  const days = []; for(let d=from; d<=to; d=addDays(d,1)){ days.push(d); if(days.length>800) break; }
+  const perDay = {}; days.forEach(d=>perDay[d]=0); act.forEach(c=>{ if(c.date in perDay) perDay[c.date]++; });
+  const elapsed = days.filter(d=>d<=lastDay);
+  const working = elapsed.filter(d=>parseYmd(d).getDay()!==0 || perDay[d]>0);
+  const dailyVals = working.map(d=>perDay[d]);
+  const st = stats(dailyVals);
+  const tc = typeCounts(act);
+  const intl = act.length - tc["Domestic"];
+  $("rangeLbl").textContent = `${fmtD(from)} to ${fmtD(to)} · ${elapsed.length} day${elapsed.length===1?"":"s"} elapsed (${working.length} working – Sundays without cases are excluded from daily averages)`;
+  $("dashKpis").innerHTML = `
+    <div class="kpi"><div class="l">Total cases</div><div class="v">${act.length}</div><div class="x">excl. ${dropped} cancelled/no-show</div></div>
+    <div class="kpi green"><div class="l">Scans completed</div><div class="v">${done}</div><div class="x">${pct(done,act.length)}% of booked</div></div>
+    <div class="kpi"><div class="l">Average per day</div><div class="v">${st.n?f1(st.mean):"0.0"}</div><div class="x">median ${st.n?f1(st.median):0} · peak ${st.max||0}</div></div>
+    <div class="kpi"><div class="l">Domestic</div><div class="v">${tc["Domestic"]}</div><div class="x">${pct(tc["Domestic"],act.length)}%</div></div>
+    <div class="kpi gold"><div class="l">International</div><div class="v">${intl}</div><div class="x">BD ${tc["International – Bangladesh"]} · SAARC ${tc["International – Other SAARC"]} · other ${tc["International – Non-SAARC"]}</div></div>
+    <div class="kpi red"><div class="l">Cancellation rate</div><div class="v">${pct(dropped,inR.length)}%</div><div class="x">${dropped} of ${inR.length} booked</div></div>`;
+  // target (current month)
+  const tgt = Number(settings.monthlyTarget)||0;
+  const d0 = new Date(), ms = ymd(new Date(d0.getFullYear(),d0.getMonth(),1));
+  const mCount = cases.filter(c=>c.date>=ms && c.date<=t && isActive(c)).length;
+  const dim = new Date(d0.getFullYear(), d0.getMonth()+1, 0).getDate();
+  const projected = Math.round(mCount / d0.getDate() * dim);
+  $("targetCard").innerHTML = tgt ? `<h3>${MON[d0.getMonth()]} ${d0.getFullYear()} target</h3>
+    <div class="row" style="justify-content:space-between;align-items:flex-end"><div><span style="font-size:30px;font-weight:800;letter-spacing:-.8px">${mCount}</span> <span class="note">/ ${tgt} cases</span></div><span class="badge" style="font-size:13px">${pct(mCount,tgt)}%</span></div>
+    <div class="note" style="margin-top:4px">Run-rate projection <b>${projected}</b> · ${Math.max(0,tgt-mCount)} more needed</div>
+    <div class="prog"><span style="width:${Math.min(100,pct(mCount,tgt))}%"></span></div>`
+    : `<div class="note">Set a monthly case target in <a href="#settings">Settings</a> to track progress here.</div>`;
+  // milestone
+  const doneAll = (Number(settings.openingScans)||0) + cases.filter(c=>DONE.includes(c.status)).length;
+  const nextM = doneAll<1000 ? 1000 : Math.ceil((doneAll+1)/500)*500;
+  $("milestoneCard").innerHTML = `<h3>Scan milestone</h3><div class="row"><div class="grow"><b style="font-size:22px">${doneAll.toLocaleString("en-IN")}</b> scans completed${settings.openingScans?` <span class="note">(incl. ${Number(settings.openingScans).toLocaleString("en-IN")} before this app)</span>`:""}</div><div class="note"><b>${(nextM-doneAll).toLocaleString("en-IN")}</b> to go for ${nextM.toLocaleString("en-IN")}</div></div><div class="prog"><span style="width:${Math.min(100,pct(doneAll,nextM))}%"></span></div>${!settings.openingScans?`<div class="note" style="margin-top:6px">Enter scans done before this app in <a href="#settings">Settings</a> to make this count accurate.</div>`:""}`;
+  // TAT
+  const hrs = (a,b)=> (a&&b&&b>a) ? (b-a)/3600e3 : null;
+  const tatScanRep = act.map(c=>hrs(hAt(c,"Scan Done"),hAt(c,"Reported"))).filter(x=>x!=null);
+  const tatBookScan = act.map(c=>{ const b = c.createdAt?new Date(c.createdAt):null; return hrs(b,hAt(c,"Scan Done")); }).filter(x=>x!=null);
+  const S1=stats(tatScanRep), S2=stats(tatBookScan);
+  const tRow=(l,S,u)=>`<tr><td>${l}</td><td class="n">${S.n||0}</td><td class="n">${S.n?f1(S.median)+u:"–"}</td><td class="n">${S.n?f1(S.mean)+u:"–"}</td><td class="n">${S.n?f1(S.p90)+u:"–"}</td></tr>`;
+  const within24 = tatScanRep.filter(x=>x<=24).length;
+  $("tatTbl").innerHTML = `<table><thead><tr><th>Stage</th><th class="n">n</th><th class="n">Median</th><th class="n">Mean</th><th class="n">90th %</th></tr></thead><tbody>${tRow("Scan → report",S1," h")}${tRow("Booking → scan",S2," h")}</tbody></table><div class="note" style="margin-top:6px">${S1.n?`${pct(within24,S1.n)}% of reports within 24 h. `:""}Times are taken from when the status was changed in the app.</div>`;
+  // visit type
+  const vt = {}; act.forEach(c=>{ const k=c.visitType||"Not recorded"; vt[k]=(vt[k]||0)+1; });
+  const uq = new Set(act.map(c=>c.uhid).filter(Boolean)).size;
+  $("visitTbl").innerHTML = `<table><tbody>${Object.entries(vt).sort((a,b)=>b[1]-a[1]).map(([k,n])=>`<tr><td>${esc(k)}</td><td class="n">${n}</td><td class="n">${pct(n,act.length)}%</td></tr>`).join("")||"<tr><td class='note'>No data</td></tr>"}</tbody></table><div class="note" style="margin-top:6px">${uq} unique patients (by UHID) in this period.</div>`;
+  // revenue
+  const billed = act.filter(c=>typeof c.amount==="number");
+  if(billed.length){
+    const net = c => typeof c.net==="number" ? c.net : c.amount-(Number(c.discount)||0);
+    const G = billed.reduce((s,c)=>s+c.amount,0), D = billed.reduce((s,c)=>s+(Number(c.discount)||0),0), N = G-D;
+    const discCases = billed.filter(c=>Number(c.discount)>0).length;
+    const grp = (keyFn)=>{ const o={}; billed.forEach(c=>{ const k=keyFn(c); if(!o[k]) o[k]={n:0,g:0,d:0}; o[k].n++; o[k].g+=c.amount; o[k].d+=Number(c.discount)||0; }); return Object.entries(o).sort((a,b)=>(b[1].g-b[1].d)-(a[1].g-a[1].d)); };
+    const tbl = (title, rows)=>`<div class="tblwrap" style="margin-top:12px"><table><thead><tr><th>${title}</th><th class="n">Cases</th><th class="n">Amount</th><th class="n">Discount</th><th class="n">Balance</th></tr></thead><tbody>${rows.map(([k,v])=>`<tr><td>${esc(k)}</td><td class="n">${v.n}</td><td class="n">${fmtAcc(v.g)}</td><td class="n">${v.d?fmtAcc(-v.d):"–"}</td><td class="n"><b>${fmtAcc(v.g-v.d)}</b></td></tr>`).join("")}<tr><td><b>Total</b></td><td class="n"><b>${billed.length}</b></td><td class="n"><b>${fmtAcc(G)}</b></td><td class="n"><b>${D?fmtAcc(-D):"–"}</b></td><td class="n"><b>${fmtAcc(N)}</b></td></tr></tbody></table></div>`;
+    $("revCard").innerHTML = `<h3>Billing</h3>
+      <div class="sumrows">
+        <div><span>Gross amount<small>${billed.length} of ${act.length} cases billed</small></span><b>${fmtAcc(G)}</b></div>
+        <div><span>Discounts<small>${discCases} case${discCases===1?"":"s"} · ${pct(D,G)}% of gross</small></span><b class="neg">${fmtAcc(-D)}</b></div>
+        <div class="tot"><span>Net balance<small>avg ${fmtAcc(N/billed.length)} per case</small></span><b>${fmtAcc(N)}</b></div>
+      </div>
+      ${tbl("Patient type", grp(c=>TYPE_SHORT[c.patientType||classify(c.country)]))}
+      ${tbl("Billing category", grp(c=>c.billing||"Not recorded"))}`;
+  } else $("revCard").innerHTML = `<h3>Billing</h3><div class="note">New cases get the standard tariff automatically. Amounts will show here once cases are saved.</div>`;
+  // dormant + new doctors
+  const t0 = today(), d30 = addDays(t0,-30), d120 = addDays(t0,-120);
+  const docMap = {}; cases.filter(isActive).forEach(c=>{ if(!c.referredBy) return; const k=c.referredBy.trim().toLowerCase(); if(!docMap[k]) docMap[k]={name:c.referredBy.trim(),first:c.date,last:c.date,n90:0,unit:c.unit}; const m=docMap[k]; if(c.date<m.first) m.first=c.date; if(c.date>m.last){ m.last=c.date; m.unit=c.unit; } if(c.date>=d120 && c.date<d30) m.n90++; });
+  const dorm = Object.values(docMap).filter(m=>m.last<d30 && m.last>=d120).sort((a,b)=>b.n90-a.n90);
+  $("dormTbl").innerHTML = dorm.length ? `<table><thead><tr><th>Doctor</th><th>Unit</th><th class="n">Earlier cases</th><th class="n">Last</th></tr></thead><tbody>${dorm.slice(0,15).map(m=>`<tr><td>${esc(m.name)}</td><td class="note">${esc(m.unit||"")}</td><td class="n">${m.n90}</td><td class="n">${fmtD(m.last)}</td></tr>`).join("")}</tbody></table>` : `<div class="note">None – every recent referrer has sent a case in the last 30 days.</div>`;
+  const newDocs = Object.values(docMap).filter(m=>m.first>=from && m.first<=to).sort((a,b)=>a.first.localeCompare(b.first));
+  $("newDocTbl").innerHTML = newDocs.length ? `<table><thead><tr><th>Doctor</th><th>Unit</th><th class="n">First case</th></tr></thead><tbody>${newDocs.slice(0,20).map(m=>`<tr><td>${esc(m.name)}</td><td class="note">${esc(m.unit||"")}</td><td class="n">${fmtD(m.first)}</td></tr>`).join("")}</tbody></table>` : `<div class="note">No new referring doctors in this period.</div>`;
+  // mix bar
+  $("mixBar").innerHTML = act.length ? `<div class="split">${TYPES.map(ty=>tc[ty]?`<span style="width:${pct(tc[ty],act.length)}%;background:${TYPE_COL[ty]}"></span>`:"").join("")}</div>
+    <div class="legend">${TYPES.map(ty=>`<span><i style="background:${TYPE_COL[ty]}"></i>${TYPE_SHORT[ty]} ${tc[ty]} (${pct(tc[ty],act.length)}%)</span>`).join("")}</div>` : `<div class="note">No cases in this period.</div>`;
+  // charts
+  let cum = 0; const cumVals = days.map(d=> d<=lastDay ? (cum+=perDay[d]) : null);
+  const lbl = days.map(d=>{ const x=parseYmd(d); return pad(x.getDate())+"-"+MON[x.getMonth()]; });
+  mkChart("chDaily",{type:"bar",data:{labels:lbl,datasets:[
+      {type:"bar",label:"Daily cases",data:days.map(d=>perDay[d]),backgroundColor:"#00727c",borderRadius:3,yAxisID:"y"},
+      {type:"line",label:"Cumulative",data:cumVals,borderColor:"#c99a2e",backgroundColor:"#c99a2e",pointRadius:0,borderWidth:2.5,tension:.2,yAxisID:"y1"}]},
+    options:{maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{position:"bottom"}},
+      scales:{x:{grid:{display:false},ticks:{maxTicksLimit:10,autoSkip:true}},y:{beginAtZero:true,ticks:{precision:0},title:{display:true,text:"Daily"}},y1:{position:"right",beginAtZero:true,grid:{display:false},ticks:{precision:0},title:{display:true,text:"Cumulative"}}}}});
+  const byUnit = {}; act.forEach(c=>{ const u=c.unit||"Not specified"; byUnit[u]=(byUnit[u]||0)+1; });
+  const units = Object.entries(byUnit).sort((a,b)=>b[1]-a[1]);
+  mkChart("chUnit",{type:"bar",data:{labels:units.map(u=>u[0].length>28?u[0].slice(0,27)+"…":u[0]),datasets:[{label:"Cases",data:units.map(u=>u[1]),backgroundColor:"#00727c",borderRadius:4}]},
+    options:{indexAxis:"y",maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0}},y:{grid:{display:false}}}}});
+  mkChart("chType",{type:"doughnut",data:{labels:TYPES.map(x=>TYPE_SHORT[x]),datasets:[{data:TYPES.map(x=>tc[x]),backgroundColor:TYPES.map(x=>TYPE_COL[x]),borderWidth:2,borderColor:"#fff"}]},
+    options:{maintainAspectRatio:false,cutout:"62%",plugins:{legend:{position:"bottom"}}}});
+  const sCol = {"Scheduled":"#2856a3","Prep Informed":"#c99a2e","Arrived":"#5b2ea3","Scan Done":"#1f7a3f","Reported":"#125a2c","Cancelled":"#b3261e","No-show":"#e07a72"};
+  mkChart("chStatus",{type:"bar",data:{labels:STATUSES,datasets:[{data:STATUSES.map(s=>inR.filter(c=>c.status===s).length),backgroundColor:STATUSES.map(s=>sCol[s]),borderRadius:4}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{precision:0}},x:{grid:{display:false}}}}});
+  const dowTot = [0,0,0,0,0,0,0], dowDays=[0,0,0,0,0,0,0];
+  elapsed.forEach(d=>{ const w=parseYmd(d).getDay(); dowTot[w]+=perDay[d]; dowDays[w]++; });
+  const order=[1,2,3,4,5,6,0];
+  mkChart("chDow",{type:"bar",data:{labels:order.map(i=>DOW[i]),datasets:[{label:"Avg cases",data:order.map(i=>dowDays[i]?r1(dowTot[i]/dowDays[i]):0),backgroundColor:"#c99a2e",borderRadius:4}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+" avg / day"}}},scales:{y:{beginAtZero:true},x:{grid:{display:false}}}}});
+  const bands=[["<18",0,17],["18–30",18,30],["31–40",31,40],["41–50",41,50],["51–60",51,60],["61–70",61,70],["71+",71,200]];
+  const ages = act.map(c=>c.age).filter(a=>typeof a==="number" && a>=0 && a<120);
+  mkChart("chAge",{type:"bar",data:{labels:bands.map(b=>b[0]),datasets:[
+      {label:"Male",data:bands.map(b=>act.filter(c=>c.gender==="Male"&&c.age>=b[1]&&c.age<=b[2]).length),backgroundColor:"#00727c",borderRadius:3},
+      {label:"Female",data:bands.map(b=>act.filter(c=>c.gender==="Female"&&c.age>=b[1]&&c.age<=b[2]).length),backgroundColor:"#d97aa6",borderRadius:3},
+      {label:"Not recorded",data:bands.map(b=>act.filter(c=>!["Male","Female"].includes(c.gender)&&c.age>=b[1]&&c.age<=b[2]).length),backgroundColor:"#b8c6c9",borderRadius:3}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{position:"bottom"}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,ticks:{precision:0}}}}});
+  // stats table
+  const ageS = stats(ages);
+  const male = act.filter(c=>c.gender==="Male").length, fem = act.filter(c=>c.gender==="Female").length;
+  const busiest = order.map(i=>[DOW[i], dowDays[i]?dowTot[i]/dowDays[i]:0]).sort((a,b)=>b[1]-a[1])[0];
+  const peakDay = elapsed.reduce((best,d)=> perDay[d]>(best?perDay[best]:-1)?d:best, null);
+  const zeroDays = working.filter(d=>!perDay[d]).length;
+  const cv = st.n && st.mean ? st.sd/st.mean*100 : 0;
+  const rows = [
+    ["Working days in period", st.n||0],
+    ["Total cases (excl. cancelled)", act.length],
+    ["Mean cases / working day", st.n?f1(st.mean):"–"],
+    ["Median cases / working day", st.n?r1(st.median):"–"],
+    ["Standard deviation", st.n?f1(st.sd):"–"],
+    ["Coefficient of variation", st.n?r1(cv)+"%":"–"],
+    ["Interquartile range (Q1 – Q3)", st.n?r1(st.q1)+" – "+r1(st.q3):"–"],
+    ["90th percentile day", st.n?r1(st.p90):"–"],
+    ["Minimum / maximum day", st.n?st.min+" / "+st.max:"–"],
+    ["Peak day", peakDay&&perDay[peakDay]?fmtD(peakDay)+" ("+perDay[peakDay]+")":"–"],
+    ["Working days with zero cases", zeroDays],
+    ["Busiest weekday (average)", busiest&&busiest[1]?busiest[0]+" ("+r1(busiest[1])+")":"–"],
+    ["Mean age ± SD", ageS.n?r1(ageS.mean)+" ± "+r1(ageS.sd)+" yrs":"–"],
+    ["Median age (range)", ageS.n?r1(ageS.median)+" ("+ageS.min+"–"+ageS.max+")":"–"],
+    ["Male : Female", (male||fem)?`${male} : ${fem} (${pct(male,male+fem)}% / ${pct(fem,male+fem)}%)`:"–"],
+    ["International share", pct(intl,act.length)+"%"],
+    ["Scan completion rate", pct(done,act.length)+"%"],
+    ["Cancellation / no-show rate", pct(dropped,inR.length)+"%"],
+    ["Distinct referring doctors", new Set(act.map(c=>(c.referredBy||"").toLowerCase()).filter(Boolean)).size],
+    ["Distinct referring units", new Set(act.map(c=>c.unit).filter(Boolean)).size]
+  ];
+  $("statsTbl").innerHTML = `<table><tbody>${rows.map(r=>`<tr><td>${r[0]}</td><td class="n"><b>${esc(r[1])}</b></td></tr>`).join("")}</tbody></table>`;
+  // unit table
+  $("unitTbl").innerHTML = units.length ? `<table><thead><tr><th>Unit</th><th class="n">Cases</th><th class="n">%</th><th class="n">Intl</th><th class="n">Done</th></tr></thead><tbody>${units.map(([u,n])=>{
+      const li = act.filter(c=>(c.unit||"Not specified")===u);
+      return `<tr><td>${esc(u)}</td><td class="n">${n}</td><td class="n">${pct(n,act.length)}</td><td class="n">${li.filter(c=>(c.patientType||classify(c.country))!=="Domestic").length}</td><td class="n">${li.filter(c=>DONE.includes(c.status)).length}</td></tr>`;}).join("")}
+      <tr><td><b>Total</b></td><td class="n"><b>${act.length}</b></td><td class="n">100</td><td class="n"><b>${intl}</b></td><td class="n"><b>${done}</b></td></tr></tbody></table>` : `<div class="note">No data.</div>`;
+  // doctors
+  const byDoc = {}; act.forEach(c=>{ const k=(c.referredBy||"Not recorded").trim(); const key=k.toLowerCase(); if(!byDoc[key]) byDoc[key]={n:0,name:k,unitsC:{}}; byDoc[key].n++; if(c.unit) byDoc[key].unitsC[c.unit]=(byDoc[key].unitsC[c.unit]||0)+1; });
+  const docs = Object.values(byDoc).sort((a,b)=>b.n-a.n).slice(0,15);
+  $("docTbl").innerHTML = docs.length ? `<table><thead><tr><th>#</th><th>Doctor</th><th>Main unit</th><th class="n">Cases</th><th class="n">%</th></tr></thead><tbody>${docs.map((d,i)=>`<tr><td>${i+1}</td><td>${esc(d.name)}</td><td class="note">${esc(topUnit(d.unitsC))}</td><td class="n">${d.n}</td><td class="n">${pct(d.n,act.length)}</td></tr>`).join("")}</tbody></table>` : `<div class="note">No data.</div>`;
+  // countries
+  const byC = {}; act.filter(c=>(c.patientType||classify(c.country))!=="Domestic").forEach(c=>{ byC[c.country]=(byC[c.country]||0)+1; });
+  const cs = Object.entries(byC).sort((a,b)=>b[1]-a[1]);
+  $("countryTbl").innerHTML = cs.length ? `<table><thead><tr><th>Country</th><th>Group</th><th class="n">Cases</th><th class="n">% of intl</th></tr></thead><tbody>${cs.map(([c,n])=>{ const ty=classify(c); return `<tr><td>${esc(c)}</td><td><span class="badge ${TYPE_CLS[ty]}">${TYPE_SHORT[ty]}</span></td><td class="n">${n}</td><td class="n">${pct(n,intl)}</td></tr>`;}).join("")}</tbody></table>` : `<div class="note">No international patients in this period.</div>`;
+  // months (all-time, respects FY)
+  const byM = {}; cases.forEach(c=>{ if(!c.date) return; const k=c.date.slice(0,7); if(!byM[k]) byM[k]={n:0,intl:0,bd:0,drop:0,done:0}; if(isActive(c)){ byM[k].n++; const ty=c.patientType||classify(c.country); if(ty!=="Domestic") byM[k].intl++; if(ty==="International – Bangladesh") byM[k].bd++; if(DONE.includes(c.status)) byM[k].done++; } else byM[k].drop++; });
+  const mk = Object.keys(byM).sort();
+  let mc = 0;
+  $("monthTbl").innerHTML = mk.length ? `<table><thead><tr><th>Month</th><th class="n">Cases</th><th class="n">MoM</th><th class="n">Domestic</th><th class="n">Bangladesh</th><th class="n">Other intl</th><th class="n">Cancelled</th><th class="n">Cumulative</th></tr></thead><tbody>${mk.map((k,i)=>{
+      const m=byM[k], prev=i?byM[mk[i-1]].n:null; mc+=m.n; const g = prev? r1((m.n-prev)/prev*100) : null;
+      const [y,mo]=k.split("-");
+      return `<tr><td>${MON[+mo-1]}-${y}</td><td class="n"><b>${m.n}</b></td><td class="n" style="color:${g==null?"inherit":g>=0?"var(--green)":"var(--red)"}">${g==null?"–":(g>0?"+":"")+g+"%"}</td><td class="n">${m.n-m.intl}</td><td class="n">${m.bd}</td><td class="n">${m.intl-m.bd}</td><td class="n">${m.drop}</td><td class="n">${mc}</td></tr>`;}).reverse().join("")}</tbody></table>` : `<div class="note">No data yet.</div>`;
+}
+
+/* ---------- settings ---------- */
+function renderSettings(){
+  $("sRefTo").value = settings.referredTo; $("sTarget").value = settings.monthlyTarget||"";
+  $("sFy").value = String(settings.fyStartMonth||4);
+  $("sUnits").value = settings.units.join("\n"); $("sScans").value = settings.scanTypes.join("\n");
+  $("sTarD").value = fmtNum(tariffFor("Domestic")); $("sTarI").value = fmtNum(tariffFor("International – Bangladesh"));
+  $("sSheet").value = settings.sheetUri || DEFAULT_SETTINGS.sheetUri;
+  $("sPhone").value = settings.deskPhone||""; $("sFast").value = settings.fastingHours||6; $("sOpen").value = settings.openingScans||"";
+}
+document.querySelectorAll("#v-settings .money").forEach(el=>{ el.addEventListener("focus",()=>{ const v=parseMoney(el.value); el.value=v==null?"":String(v); }); el.addEventListener("blur",()=>{ const v=parseMoney(el.value); el.value=v==null?"":fmtNum(v); }); });
+$("saveSettings").onclick = async ()=>{
+  if(!db){ toast("Not connected"); return; }
+  const lines = id => $(id).value.split("\n").map(s=>s.trim()).filter(Boolean);
+  const s = { referredTo: $("sRefTo").value.trim() || DEFAULT_SETTINGS.referredTo, monthlyTarget: Number($("sTarget").value)||0,
+    fyStartMonth: Number($("sFy").value)||4, units: lines("sUnits").length?lines("sUnits"):DEFAULT_SETTINGS.units, scanTypes: lines("sScans").length?lines("sScans"):DEFAULT_SETTINGS.scanTypes,
+    tariffs: { domestic: parseMoney($("sTarD").value)||27300, international: parseMoney($("sTarI").value)||38500 },
+    sheetUri: $("sSheet").value.trim() || DEFAULT_SETTINGS.sheetUri,
+    deskPhone: $("sPhone").value.trim(), fastingHours: Number($("sFast").value)||6, openingScans: Number($("sOpen").value)||0 };
+  try{ const before = JSON.parse(JSON.stringify(settings)); await db.doc("config/settings").set(s); logChange("settings", null, before, s, {name:"Settings"}); $("settingsMsg").textContent = "Saved for the whole team."; setTimeout(()=>$("settingsMsg").textContent="",3000); }
+  catch(err){ handleWriteErr(err); }
+};
+
+/* ---------- errors / banner ---------- */
+function handleWriteErr(err){
+  console.error(err);
+  const code = err && err.code;
+  if(code==="invalid_argument"){ canWrite=false; setBanner("warn","You have view-only access. Ask Hemakumar to give you Contributor access to add or update cases."); }
+  else if(code==="quota_exceeded") toast("Storage is full – export and archive older cases.");
+  else if(code==="resource_exhausted") toast("Too many changes at once – try again in a moment.");
+  else toast("Couldn't save – check your connection and try again.");
+}
+function setBanner(kind, html){ $("banner").innerHTML = html ? `<div class="${kind}">${html}</div>` : ""; }
+
+/* ---------- backup ---------- */
+async function exportBackup(){
+  const data = { app:"petct-team-desk", format:1, exportedAt:new Date().toISOString(),
+    settings: JSON.parse(JSON.stringify(settings)),
+    cases: cases.map(c=>JSON.parse(JSON.stringify(c))),
+    changes: changes.map(c=>JSON.parse(JSON.stringify(c))) };
+  const blob = new Blob([JSON.stringify(data,null,1)], {type:"application/json"});
+  const name = `PETCT-backup-${fmtD(today())}.json`;
+  if(downloads){
+    try{ await downloads.save({filename:name, data:blob}); $("backupMsg").textContent = `${data.cases.length} cases saved to ${name}`; return; }
+    catch(e){ if(e && (e.code==="declined"||e.code==="cancelled")) return; console.error(e); }
+  }
+  toast("Downloads aren't available in this view");
+}
+$("backupBtn").onclick = exportBackup;
+
+/* ---------- boot ---------- */
+$("hdrDate").textContent = DOW[new Date().getDay()] + ", " + fmtD(today()).slice(0,6);
+renderAddForm({});
+route();
+
+(async ()=>{
+  if(!window.claude || !window.claude.use){ setBanner("warn","Open this app from its claude.ai link to see the team's shared cases."); loaded=true; renderView(); return; }
+  [db, user, sample, downloads, mcp] = await Promise.all(["db","user","sample","downloads","mcp"].map(n=>window.claude.use(n).catch(()=>null)));
+  renderThumbs();
+  if(user && user.can){ try{ const w = await user.can("data.write"); if(w===false){ canWrite=false; setBanner("warn","You have view-only access. Ask Hemakumar for Contributor access to add or update cases."); } }catch(e){} }
+  if(!db){ setBanner("warn","Sign in to claude.ai to load and save the team's cases."); loaded=true; renderView(); return; }
+  db.doc("config/settings").onSnapshot(snap=>{
+    if(snap.exists){ const d = snap.data(); settings = {...DEFAULT_SETTINGS, ...d, units: Array.isArray(d.units)&&d.units.length?d.units.slice():DEFAULT_SETTINGS.units, scanTypes: Array.isArray(d.scanTypes)&&d.scanTypes.length?d.scanTypes.slice():DEFAULT_SETTINGS.scanTypes}; }
+    const v = current(); if(v==="settings") renderSettings(); if(v==="dash") renderDash();
+  }, e=>console.error(e));
+  db.collection("changes").onSnapshot(snap=>{
+    changes = snap.docs.map(d=>({id:d.id, ...d.data()})).filter(c=>c.at);
+    if(current()==="changes") renderChanges();
+  }, e=>console.error(e));
+  db.collection("cases").onSnapshot(snap=>{
+    cases = snap.docs.map(d=>({id:d.id, ...d.data()}));
+    loaded = true;
+    const v = current(); if(v!=="add" && v!=="settings") renderView(v);
+  }, e=>{ console.error(e); setBanner("err","Lost connection to the shared case list. Reload the page."); });
+})();
+})();
+</script>
+</body>
+</html>

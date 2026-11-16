@@ -1,0 +1,15 @@
+{
+  "name": "petct-team-desk-tests",
+  "private": true,
+  "description": "Headless browser tests for the PET-CT Team Desk app (mocked database, Claude and Microsoft 365)",
+  "scripts": {
+    "test": "node name_test.js && node test.js && node today_test.js && node blur_test.js && node fab_test.js && node print_test.js && node shots.js"
+  },
+  "devDependencies": {
+    "chart.js": "4.4.1",
+    "jspdf": "2.5.1",
+    "jspdf-autotable": "3.8.2",
+    "pdfjs-dist": "3.11.174",
+    "playwright": "^1.47.0"
+  }
+}
