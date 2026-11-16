@@ -26,11 +26,6 @@ Mobile app for the PET-CT team at **Apollo Cancer Centres, Vanagaram**. It cover
 - **iPhone:** open the link in Safari → Share → **Add to Home Screen**.
 - **Android:** open it in Chrome → ⋮ → **Install app** (or **Add to Home screen**).
 
-### Moving the cases from the claude.ai version
-1. In the claude.ai app: **Settings → Backup → Download backup**.
-2. In the GitHub app: **Settings → Backup → Import backup**, then choose that file.
-3. Sign in to Google Drive sync so the cases are also stored in Drive.
-
 ## What's in this repository
 
 | Path | What it is |

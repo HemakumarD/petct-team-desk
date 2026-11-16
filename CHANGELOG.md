@@ -18,7 +18,6 @@
 
 - [ ] Import past PET-CT tracker Excel (Jan–Jun 2026 and later) so FY and cumulative figures are complete
 - [ ] Set the real referring unit list, monthly target, desk phone and opening scan count in Settings
-- [ ] Move the cases across: claude.ai Backup → GitHub Import
 - [ ] Sign in to Google Drive sync and share the data file with the team
 - [ ] Get Apollo IT / compliance approval for storing patient data in Google Drive and sending documents to the Claude API
 - [ ] Native speaker check of the Tamil and Bengali prep messages
